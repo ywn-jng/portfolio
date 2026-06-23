@@ -1,8 +1,7 @@
 import { useRef, useEffect, useMemo, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader, useThree, type RootState } from "@react-three/fiber";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
-import { useLoader } from "@react-three/fiber";
 import * as THREE from "three";
 
 const LID_COLORS = [
@@ -160,7 +159,7 @@ function BottleShoulderLabel({ variantIndex }: { variantIndex: number }) {
 function Bottle({ variantIndex, position }: { variantIndex: number; position: [number, number, number] }) {
   const ref = useRef<THREE.Group>(null!);
   const materials = useLoader(MTLLoader, "/media/makuly/MAKULY.mtl");
-  const obj = useLoader(OBJLoader, "/media/makuly/MAKULY.obj", (loader) => {
+  const obj = useLoader(OBJLoader, "/media/makuly/MAKULY.obj", (loader: OBJLoader) => {
     materials.preload();
     loader.setMaterials(materials);
   });
@@ -202,7 +201,7 @@ function Bottle({ variantIndex, position }: { variantIndex: number; position: [n
       metalness: 0.1,
     });
 
-    clonedObj.traverse((child) => {
+    clonedObj.traverse((child: THREE.Object3D) => {
       if (!(child instanceof THREE.Mesh)) return;
       if (child.name === "glass" || child.parent?.name === "glass") {
         child.material = glassMaterial;
@@ -218,7 +217,7 @@ function Bottle({ variantIndex, position }: { variantIndex: number; position: [n
     clonedObj.position.sub(center);
   }, [clonedObj, variantIndex]);
 
-  useFrame((_state, delta) => {
+  useFrame((_state: RootState, delta: number) => {
     if (ref.current) {
       ref.current.rotation.y += delta * 0.4;
     }
