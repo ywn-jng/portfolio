@@ -1,0 +1,178 @@
+{
+  "lets-hug": {
+    "thumbnail": {
+      "type": "image",
+      "src": "/media/lets-hug/thumbnail.gif"
+    },
+    "media": [
+      {
+        "type": "video",
+        "src": "/media/lets-hug/01.mov"
+      },
+      {
+        "type": "image",
+        "src": "/media/lets-hug/02.gif"
+      },
+      {
+        "type": "image",
+        "src": "/media/lets-hug/03.png"
+      }
+    ],
+    "process": [
+      {
+        "type": "image",
+        "src": "/media/lets-hug/process/01.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/lets-hug/process/02.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/lets-hug/process/03.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/lets-hug/process/04.png"
+      }
+    ]
+  },
+  "make-choice-fate": {
+    "thumbnail": {
+      "type": "image",
+      "src": "/media/make-choice-fate/thumbnail.png"
+    },
+    "media": [
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/01.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/03.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/04.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/05.png"
+      }
+    ],
+    "process": [
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/process/01.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/process/02.PNG"
+      },
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/process/03.PNG"
+      },
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/process/04.PNG"
+      }
+    ]
+  },
+  "makuly": {
+    "thumbnail": {
+      "type": "image",
+      "src": "/media/makuly/thumbnail.png"
+    },
+    "media": [
+      {
+        "type": "image",
+        "src": "/media/makuly/02.gif"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/03.gif"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/05.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/06.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/07.png"
+      }
+    ],
+    "process": [
+      {
+        "type": "image",
+        "src": "/media/makuly/process/01.jpg"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/process/03.PNG"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/process/04.jpg"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/process/05.jpg"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/process/06.jpg"
+      },
+      {
+        "type": "image",
+        "src": "/media/makuly/process/07.jpg"
+      }
+    ]
+  },
+  "what-could-you-be": {
+    "thumbnail": {
+      "type": "image",
+      "src": "/media/what-could-you-be/thumbnail.png"
+    },
+    "media": [
+      {
+        "type": "image",
+        "src": "/media/what-could-you-be/01.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/what-could-you-be/02.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/what-could-you-be/03.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/what-could-you-be/04.png"
+      }
+    ],
+    "process": [
+      {
+        "type": "image",
+        "src": "/media/what-could-you-be/process/01.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/what-could-you-be/process/02.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/what-could-you-be/process/03.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/what-could-you-be/process/04.png"
+      }
+    ]
+  }
+}
