@@ -172,7 +172,7 @@ video {
   bottom: 0;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   column-gap: var(--gap);
   align-items: end;
   padding: var(--pad);
@@ -180,11 +180,16 @@ video {
   color: #fff;
 }
 .feed-meta .m-title {
-  grid-column: 1 / span 6;
+  grid-column: 1 / span 1;
   font-size: var(--fs-base);
 }
+.feed-meta .feed-desc {
+  grid-column: 2 / span 1;
+  font-size: var(--fs-base);
+  line-height: inherit;
+}
 .feed-meta .m-cat {
-  grid-column: 10 / span 3;
+  grid-column: 4 / span 1;
   text-align: right;
   font-size: var(--fs-meta);
 }
@@ -192,7 +197,8 @@ video {
 /* Per-project: dark text over a light cover */
 .feed-item--dark .m-title,
 .feed-item--dark .m-year,
-.feed-item--dark .m-cat {
+.feed-item--dark .m-cat,
+.feed-item--dark .feed-desc {
   color: #000000;
 }
 
@@ -643,10 +649,14 @@ video {
   }
 
   .feed-meta .m-title {
-    grid-column: 1 / span 8;
+    grid-column: 1 / span 2;
+  }
+  .feed-meta .feed-desc {
+    grid-column: 1 / span 4;
+    margin-top: 0.8em;
   }
   .feed-meta .m-cat {
-    grid-column: 9 / span 4;
+    grid-column: 3 / span 2;
   }
 
   .project-grid {

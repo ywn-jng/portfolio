@@ -43,6 +43,8 @@ export type Project = {
   year: string;
   category: string;
   description: string;
+  /** Homepage feed overlay copy (column 2) */
+  feedDescription?: string;
   info?: InfoRow[];
   /** Homepage feed text color over the cover: "light" (default) or "dark" */
   coverText?: "light" | "dark";
@@ -105,6 +107,8 @@ type Meta = {
   category: string;
   role?: string;
   description: string;
+  /** Optional short copy shown in the homepage feed overlay (column 2) */
+  feedDescription?: string;
   /** Homepage feed text color over the cover: "light" (default) or "dark" */
   coverText?: "light" | "dark";
 };
@@ -115,6 +119,8 @@ const META: Record<string, Meta> = {
     year: "2026",
     category: "Moving Image",
     role: "Direction, Edit",
+    feedDescription:
+      "There are different lives we could have lived, and possibilities lost with every choice we make. Using the metaphor of Dol-jabi, this short film explores how society presents predetermined paths under the guise of free choice.",
     description:
       "Hexagonal human, an ideal measured through appearance, education, occupation, personality, family background, and assets, reflects Korea’s highly compressed development. The tendency to focus on limited social values is visible in Dol-jabi, an event for a child’s first birthday. During the celebration, several symbolic objects are placed in front of the child and the object the child picks is believed to hint at their future. The playful tradition becomes a structured ritual where society stages possibilities through the form of free choice.",
   },
@@ -216,6 +222,7 @@ function buildProjects(): Project[] {
       year: meta?.year ?? "",
       category: meta?.category ?? "",
       description: meta?.description ?? "",
+      feedDescription: meta?.feedDescription,
       info,
       coverText: meta?.coverText,
       cover,

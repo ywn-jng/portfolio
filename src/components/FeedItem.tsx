@@ -28,6 +28,9 @@ export default function FeedItem({ project, priority }: Props) {
 
       <div className="feed-meta">
         <div className="m-title">{project.title}</div>
+        {project.feedDescription ? (
+          <p className="feed-desc">{project.feedDescription}</p>
+        ) : null}
         <div className="m-cat">{project.category}</div>
       </div>
     </article>
