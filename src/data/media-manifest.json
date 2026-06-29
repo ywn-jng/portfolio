@@ -135,8 +135,8 @@
   },
   "what-could-you-be": {
     "thumbnail": {
-      "type": "image",
-      "src": "/media/what-could-you-be/thumbnail.png"
+      "type": "video",
+      "src": "/media/what-could-you-be/thumbnail.mov"
     },
     "media": [
       {
