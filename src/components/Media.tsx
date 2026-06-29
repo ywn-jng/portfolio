@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useRef, type CSSProperties } from "react";
 import type { MediaItem } from "../data/projects";
 import { useLightbox } from "./Lightbox";
 
@@ -67,15 +67,11 @@ export default function Media({
 
   if (item.type === "video") {
     return (
-      <video
+      <AutoplayVideo
         src={item.src}
         poster={item.poster}
         style={style}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload={priority ? "auto" : "metadata"}
+        priority={priority}
       />
     );
   }
@@ -89,6 +85,57 @@ export default function Media({
       onClick={zoomable ? () => open(item.src, item.alt) : undefined}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
+    />
+  );
+}
+
+function AutoplayVideo({
+  src,
+  poster,
+  style,
+  priority,
+}: {
+  src: string;
+  poster?: string;
+  style?: CSSProperties;
+  priority: boolean;
+}) {
+  const ref = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+
+    const play = () => {
+      void video.play().catch(() => {});
+    };
+
+    play();
+    video.addEventListener("loadeddata", play);
+    video.addEventListener("canplay", play);
+
+    return () => {
+      video.removeEventListener("loadeddata", play);
+      video.removeEventListener("canplay", play);
+    };
+  }, [src]);
+
+  return (
+    <video
+      ref={ref}
+      src={src}
+      poster={poster}
+      style={style}
+      autoPlay
+      muted
+      loop
+      playsInline
+      controls={false}
+      disablePictureInPicture
+      preload={priority ? "auto" : "metadata"}
     />
   );
 }

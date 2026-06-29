@@ -163,6 +163,12 @@ video {
   height: 100%;
   object-fit: cover;
 }
+.feed-media video {
+  pointer-events: none;
+}
+.feed-media video::-webkit-media-controls {
+  display: none !important;
+}
 
 
 /* Title / category — overlaid at the bottom of the media */
