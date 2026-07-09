@@ -69,8 +69,8 @@ export const SITE = {
   role: "Computational · Visual · AI",
   email: "1128yewon@gmail.com",
   instagram: {
-    handle: "@yewonjanng",
-    url: "https://www.instagram.com/yewonjanng/",
+    handle: "@ywwnjng",
+    url: "https://www.instagram.com/ywwnjng/",
   },
   about:
     "Yewon Jang is a London-based visual communicator originally from Seoul, working across creative coding, graphic design, and moving image. Using digital and time-based media, she explores the possibilities and limitations of computational tools through experimentation and play. Outside her practice, she is drawn to arthouse horror, Eastern philosophy, and life drawing, all of which continues to inform her practice.",
