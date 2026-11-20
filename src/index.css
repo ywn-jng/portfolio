@@ -1,8 +1,8 @@
 /* ───────────────────────────── Fonts ───────────────────────────── */
 @font-face {
-  font-family: "ABC Diatype";
-  src: url("/fonts/ABCDiatypeVariableEdu-Regular.ttf") format("truetype");
-  font-weight: 100 900;
+  font-family: "BonaNova";
+  src: url("/fonts/BonaNova-Regular.ttf") format("truetype");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -22,11 +22,13 @@
   --text-top: calc(var(--pad) * 0.5);
 
   /* Type — single uniform size & weight everywhere */
-  --fs-base: 13px;
-  --fs-meta: 13px;
+  --fs-base: 24px;
+  --fs-meta: var(--fs-base);
+  --letter-spacing: -0.02em;
 
-  font-family: "ABC Diatype", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-    Arial, sans-serif;
+  font-family: "BonaNova", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: var(--letter-spacing);
   color: var(--fg);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -51,9 +53,17 @@ body {
   color: var(--fg);
   font-size: var(--fs-base);
   line-height: 1.36;
-  letter-spacing: 0.01em;
+  letter-spacing: var(--letter-spacing);
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  letter-spacing: var(--letter-spacing);
 }
 
 a {
@@ -125,7 +135,6 @@ video {
 .site-header .name {
   grid-column: 1 / span 3;
   font-size: var(--fs-meta);
-  letter-spacing: 0.02em;
 }
 .site-header .nav-info {
   grid-column: 4 / span 3;
@@ -396,7 +405,6 @@ video {
   opacity: 0.4;
   pointer-events: none;
   vertical-align: top;
-  letter-spacing: 0.04em;
 }
 
 /* Export button — bottom-right corner */
