@@ -68,6 +68,8 @@ export default function LetsHug() {
       }
       if (cancelled) return;
 
+      void document.fonts.load('24px "BonaNova"').catch(() => {});
+
       const sketch = (p: p5) => {
         let video: any;
         let poseNet: any;
@@ -411,8 +413,12 @@ export default function LetsHug() {
           p.push();
           p.fill(255);
           p.noStroke();
-          p.textSize(13);
+          p.textFont("BonaNova");
+          p.textSize(24);
           p.textAlign(p.LEFT, p.TOP);
+          // p5 v2 exposes this method, but the installed v1 type definitions do not.
+          (p as p5 & { textProperty(name: string, value: string): void })
+            .textProperty("letterSpacing", "-0.02em");
           p.text(`Contact Value: ${Math.round(contactArea)}`, 20, 20);
           p.pop();
         };
