@@ -208,15 +208,16 @@ function buildProjects(): Project[] {
     ...slugs.filter((s) => !ORDER.includes(s)).sort(),
   ];
 
-  return ordered.map((slug) => {
+  return ordered.flatMap((slug) => {
     const entry = MANIFEST[slug];
     const meta = META[slug];
     const cover = COVERS[slug] ?? entry.thumbnail ?? entry.media[0];
+    if (!cover) return [];
 
     const info: InfoRow[] = [];
     if (meta?.role) info.push({ label: "Role", value: meta.role });
 
-    return {
+    return [{
       slug,
       title: meta?.title ?? slug,
       year: meta?.year ?? "",
@@ -238,7 +239,7 @@ function buildProjects(): Project[] {
         return out;
       })(),
       process: entry.process ?? [],
-    };
+    }];
   });
 }
 
