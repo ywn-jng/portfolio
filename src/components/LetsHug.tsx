@@ -48,7 +48,14 @@ const SKELETON_CONNECTIONS = [
 export default function LetsHug() {
   const containerRef = useRef<HTMLDivElement>(null);
   const p5Ref = useRef<p5 | null>(null);
+  const [attempt, setAttempt] = useState(1);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [error, setError] = useState("");
+
+  const start = () => {
+    setStatus("loading");
+    setAttempt((previous) => previous + 1);
+  };
 
   // Export handler ref so the button can trigger it
   const exportRef = useRef<() => void>(() => {});
@@ -58,17 +65,46 @@ export default function LetsHug() {
     if (!container) return;
 
     let cancelled = false;
+    let stream: MediaStream | undefined;
+    const stopCamera = () => stream?.getTracks().forEach((track) => track.stop());
+    const fail = (message: string) => {
+      stopCamera();
+      if (!cancelled) {
+        setError(message);
+        setStatus("error");
+      }
+    };
 
     (async () => {
+      // Allow React's immediate effect cleanup to cancel a duplicate startup.
+      await Promise.resolve();
+      if (cancelled) return;
+      if (!navigator.mediaDevices?.getUserMedia) {
+        fail("Camera access requires a supported browser and a secure page.");
+        return;
+      }
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      } catch {
+        fail("Could not access the camera. Check your browser’s camera permission and try again.");
+        return;
+      }
+      if (cancelled) {
+        stopCamera();
+        return;
+      }
+
       try {
         await loadMl5();
       } catch {
-        if (!cancelled) setStatus("error");
+        fail("Could not load the pose model. Check your connection and try again.");
         return;
       }
       if (cancelled) return;
 
-      void document.fonts.load('24px "BonaNova"').catch(() => {});
+      const getTextSize = () => parseFloat(getComputedStyle(container).fontSize);
+      let textSize = getTextSize();
+      void document.fonts.load(`${textSize}px "BonaNova"`).catch(() => {});
 
       const sketch = (p: p5) => {
         let video: any;
@@ -314,31 +350,34 @@ export default function LetsHug() {
           const h = container.clientHeight;
           const canvas = p.createCanvas(w, h);
           canvas.parent(container);
-          video = p.createCapture(p.VIDEO, () => {
-            if (video.elt?.videoWidth) {
-              viewTransform.sourceWidth = video.elt.videoWidth;
-              viewTransform.sourceHeight = video.elt.videoHeight;
-            }
-          });
-          video.size(640, 480);
+          video = p.createVideo([]);
           video.hide();
-          video.elt.setAttribute("playsinline", "");
+          const camera: HTMLVideoElement = video.elt;
+          camera.muted = true;
+          camera.playsInline = true;
+          camera.srcObject = stream ?? null;
 
-          poseNet = window.ml5.poseNet(video, {
-            detectionType: "multiple", flipHorizontal: false,
-            maxPoseDetections: 2, scoreThreshold: MIN_PART_SCORE,
-            minConfidence: MIN_PART_SCORE, nmsRadius: 15,
-          }, () => setStatus("ready"));
+          void camera.play().then(() => {
+            if (cancelled) return;
+            poseNet = window.ml5.poseNet(camera, {
+              detectionType: "multiple", flipHorizontal: false,
+              maxPoseDetections: 2, scoreThreshold: MIN_PART_SCORE,
+              minConfidence: MIN_PART_SCORE, nmsRadius: 15,
+            }, () => {
+              if (!cancelled) setStatus("ready");
+            });
 
-          poseNet.on("pose", (results: any) => {
-            poses = smoothAndFormatPoses(results);
-            calculateContactArea();
-          });
+            poseNet.on("pose", (results: any) => {
+              if (cancelled) return;
+              poses = smoothAndFormatPoses(results);
+              calculateContactArea();
+            });
+          }).catch(() => fail("Could not start the camera or pose model. Try again."));
 
-          setStatus("ready");
         };
 
         p.windowResized = () => {
+          textSize = getTextSize();
           const w = container.clientWidth;
           const h = container.clientHeight;
           p.resizeCanvas(w, h);
@@ -414,7 +453,7 @@ export default function LetsHug() {
           p.fill(255);
           p.noStroke();
           p.textFont("BonaNova");
-          p.textSize(24);
+          p.textSize(textSize);
           p.textAlign(p.LEFT, p.TOP);
           // p5 v2 exposes this method, but the installed v1 type definitions do not.
           (p as p5 & { textProperty(name: string, value: string): void })
@@ -431,20 +470,27 @@ export default function LetsHug() {
 
     return () => {
       cancelled = true;
+      stopCamera();
       p5Ref.current?.remove();
       p5Ref.current = null;
     };
-  }, []);
+  }, [attempt]);
 
   return (
     <div className="lets-hug" ref={containerRef}>
-      {status === "loading" && (
-        <div className="lets-hug-status">Loading camera &amp; model…</div>
-      )}
-      {status === "error" && (
-        <div className="lets-hug-status">Failed to load ml5. Please check your connection.</div>
+      {status !== "ready" && (
+        <div className="lets-hug-status">
+          <p role="status">
+            {status === "loading" && "Waiting for the camera and pose model…"}
+            {status === "error" && error}
+          </p>
+          {status === "error" && (
+            <button type="button" onClick={start}>Try again</button>
+          )}
+        </div>
       )}
       <button
+        hidden={status !== "ready"}
         type="button"
         className="mcf-export lets-hug-export"
         aria-label="Save as PNG"

@@ -2,18 +2,7 @@ import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { projects } from "../data/projects";
 import Media from "../components/Media";
-
-const ArrowLeft = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path
-      d="M19 12H5M5 12L12 19M5 12L12 5"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+import ArrowLeft from "../components/ArrowLeft";
 
 const ArrowRight = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -76,25 +65,12 @@ export default function Project() {
       <div className="project-grid">
         {/* Column 1 — information */}
         <aside className="project-info">
+          <Link to="/work" className="nav-btn page-back-arrow" aria-label="Back to Work">
+            <ArrowLeft />
+          </Link>
           <h1>{project.title}</h1>
 
-          <div className="info-table">
-            {project.year && <div className="meta-line">{project.year}</div>}
-            {project.category && (
-              <div className="meta-line">{project.category}</div>
-            )}
-            {project.info?.map((row) => (
-              <div className="meta-line" key={row.label}>
-                {row.value}
-              </div>
-            ))}
-          </div>
-
-          <p className="project-desc">{project.description}</p>
-
-          <Link to={`/${project.slug}/process`} className="project-back">
-            Process
-          </Link>
+          {project.description && <p className="project-desc">{project.description}</p>}
         </aside>
 
         {/* Columns 2–4 — continuous, full-width media */}
@@ -134,6 +110,11 @@ export default function Project() {
           <span className="nav-btn disabled" aria-hidden="true">
             <ArrowRight />
           </span>
+        )}
+        {project.process.length > 0 && (
+          <Link to={`/${project.slug}/process`} className="project-process-link">
+            Process
+          </Link>
         )}
       </nav>
     </main>

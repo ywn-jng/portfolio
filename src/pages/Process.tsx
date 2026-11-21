@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getProject } from "../data/projects";
+import ArrowLeft from "../components/ArrowLeft";
 import { useLightbox } from "../components/Lightbox";
 
 export default function Process() {
@@ -8,6 +9,8 @@ export default function Process() {
   const project = slug ? getProject(slug) : undefined;
   const trackRef = useRef<HTMLDivElement>(null);
   const animRef = useRef<Animation | null>(null);
+  const [ready, setReady] = useState(false);
+  const [paused, setPaused] = useState(false);
   const { open } = useLightbox();
 
   useEffect(() => {
@@ -23,6 +26,8 @@ export default function Process() {
   // Using exact pixel measurements (not %) guarantees a truly seamless loop —
   // no jump at the boundary regardless of image sizes or load timing.
   useEffect(() => {
+    setReady(false);
+    setPaused(false);
     const track = trackRef.current;
     if (!track || images.length === 0) return;
 
@@ -30,7 +35,9 @@ export default function Process() {
     animRef.current?.cancel();
     animRef.current = null;
 
+    let cancelled = false;
     const start = () => {
+      if (cancelled) return;
       // Respect the OS reduced-motion preference — skip auto-scroll
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -49,6 +56,7 @@ export default function Process() {
           easing: "linear",
         }
       );
+      setReady(true);
     };
 
     // Collect the first-set <img> elements and wait for all to load
@@ -63,7 +71,7 @@ export default function Process() {
     const onLoad = () => { if (--pending === 0) start(); };
 
     firstSetImgs.forEach((img) => {
-      if (img.complete && img.naturalWidth > 0) {
+      if (img.complete) {
         onLoad();
       } else {
         img.addEventListener("load",  onLoad, { once: true });
@@ -72,10 +80,23 @@ export default function Process() {
     });
 
     return () => {
+      cancelled = true;
+      firstSetImgs.forEach((img) => {
+        img.removeEventListener("load", onLoad);
+        img.removeEventListener("error", onLoad);
+      });
       animRef.current?.cancel();
       animRef.current = null;
     };
   }, [images, duration]);
+
+  const togglePlayback = () => {
+    const animation = animRef.current;
+    if (!animation) return;
+    if (paused) animation.play();
+    else animation.pause();
+    setPaused(!paused);
+  };
 
   // Set playbackRate on the live WAAPI animation
   const setRate = (rate: number) => {
@@ -98,10 +119,53 @@ export default function Process() {
   return (
     <main className="process-page">
       <div className="process-head">
-        <Link to={`/${project.slug}`} className="process-back">
-          <span className="process-back-arrow" aria-hidden="true">←</span>
-          {project.title}
+        <Link
+          to={`/${project.slug}`}
+          className="nav-btn page-back-arrow"
+          aria-label={`Back to ${project.title}`}
+        >
+          <ArrowLeft />
         </Link>
+        <h1 className="process-title">
+          <Link to={`/${project.slug}`} className="process-back">{project.title}</Link>
+        </h1>
+        {images.length > 0 && (
+          <div className="process-controls" role="group" aria-label="Process playback">
+            <button
+              type="button"
+              className="nav-btn"
+              aria-label={paused ? "Play" : "Pause"}
+              title={paused ? "Play" : "Pause"}
+              disabled={!ready}
+              onClick={togglePlayback}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d={paused ? "M7 4l13 8-13 8z" : "M7 4h3v16H7z M14 4h3v16h-3z"} />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="nav-btn process-speed"
+              aria-label="Hold for 4× speed"
+              title="Hold for 4× speed"
+              disabled={!ready || paused}
+              onPointerDown={() => setRate(4)}
+              onPointerUp={() => setRate(1)}
+              onPointerLeave={() => setRate(1)}
+              onPointerCancel={() => setRate(1)}
+              onKeyDown={(event) => {
+                if (event.key === " " || event.key === "Enter") setRate(4);
+              }}
+              onKeyUp={() => setRate(1)}
+              onBlur={() => setRate(1)}
+              onContextMenu={(event) => event.preventDefault()}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M4 5l8 7-8 7V5z M13 5l8 7-8 7V5z" />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
       {images.length === 0 ? (
@@ -137,21 +201,6 @@ export default function Process() {
             </div>
           </div>
 
-          <button
-            type="button"
-            className="process-speed"
-            aria-label="Hold for 4× speed"
-            title="Hold for 4× speed"
-            onPointerDown={() => setRate(4)}
-            onPointerUp={() => setRate(1)}
-            onPointerLeave={() => setRate(1)}
-            onPointerCancel={() => setRate(1)}
-            onContextMenu={(e) => e.preventDefault()}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M4 5l8 7-8 7V5z M13 5l8 7-8 7V5z" />
-            </svg>
-          </button>
         </>
       )}
     </main>

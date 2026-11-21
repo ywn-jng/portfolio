@@ -23,6 +23,8 @@ export type MediaItem = {
   /** Path relative to /public (image/video), a full URL (embed), or a component id (native) */
   src: string;
   poster?: string;
+  /** Direct viewing link for an embedded film. */
+  watchUrl?: string;
   alt?: string;
   /** Optional width/height ratio; falls back to natural size when omitted. */
   ratio?: number;
@@ -67,7 +69,7 @@ const MANIFEST = manifestJson as unknown as Record<string, ManifestEntry>;
 export const SITE = {
   name: "Yewon Jang",
   role: "Computational · Visual · AI",
-  email: "1128yewon@gmail.com",
+  email: "yewonjang.won@gmail.com",
   instagram: {
     handle: "@yewonnjang",
     url: "https://www.instagram.com/yewonnjang/",
@@ -114,6 +116,18 @@ type Meta = {
 };
 
 const META: Record<string, Meta> = {
+  "you-look-the-same": {
+    title: "You Look the Same",
+    category: "",
+    year: "",
+    description: "",
+  },
+  recreatures: {
+    title: "Recreatures",
+    category: "3D Title Design",
+    year: "2026",
+    description: "",
+  },
   "what-could-you-be": {
     title: "What Could You Be",
     year: "2026",
@@ -159,8 +173,10 @@ const EMBEDS: Record<string, MediaItem[]> = {
   "what-could-you-be": [
     {
       type: "embed",
-      src: "https://www.youtube.com/embed/YGQdBOdiH3Q?autoplay=1&mute=1&playsinline=1&rel=0",
+      src: "https://www.youtube.com/embed/egIzv8ebT4M?autoplay=1&mute=1&playsinline=1&rel=0",
       ratio: 16 / 9,
+      poster: "https://i.ytimg.com/vi/egIzv8ebT4M/hqdefault.jpg",
+      watchUrl: "https://www.youtube.com/watch?v=egIzv8ebT4M",
       title: "What Could You Be — film",
     },
   ],
@@ -199,7 +215,7 @@ const COVERS: Record<string, MediaItem> = {
 };
 
 /** Homepage order. Slugs not listed here are appended alphabetically. */
-const ORDER = ["what-could-you-be", "lets-hug", "make-choice-fate", "makuly"];
+const ORDER = ["what-could-you-be", "lets-hug", "makuly", "you-look-the-same", "recreatures", "make-choice-fate"];
 
 function buildProjects(): Project[] {
   const slugs = Object.keys(MANIFEST);

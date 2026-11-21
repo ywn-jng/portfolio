@@ -19,6 +19,7 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/work" element={<Home work />} />
         <Route path="/info" element={<About />} />
         <Route path="/:slug/process" element={<Process />} />
         <Route path="/:slug" element={<Project />} />

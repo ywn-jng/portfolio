@@ -46,20 +46,26 @@ export default function Media({
   }
 
   if (item.type === "embed") {
+    // A file-based preview cannot send YouTube a valid web referrer.
+    if (item.watchUrl && window.location.protocol === "file:") {
+      return (
+        <a className="embed-poster" href={item.watchUrl} target="_blank" rel="noopener noreferrer">
+          <img src={item.poster} alt={item.title} style={style} />
+        </a>
+      );
+    }
+
     return (
       <iframe
         className={`embed${item.interactive ? " embed-interactive" : ""}`}
         src={item.src}
         title={item.title ?? "Embedded media"}
         style={style}
-        // Interactive embeds load eagerly; lazy iframes can stay blank until
-        // scrolled near, which read as "empty space".
-        loading={item.interactive ? "eager" : priority ? "eager" : "lazy"}
-        // `camera; microphone` are required for webcam-based sketches
-        // (e.g. ml5 / p5 pose tracking) and must be delegated to the iframe —
-        // Safari in particular blocks getUserMedia in cross-origin frames
-        // without this.
-        allow="camera; microphone; autoplay; fullscreen; encrypted-media; gyroscope; accelerometer; picture-in-picture; clipboard-write; xr-spatial-tracking"
+        loading={item.interactive || priority ? "eager" : "lazy"}
+        referrerPolicy="strict-origin-when-cross-origin"
+        allow={item.interactive
+          ? "camera; microphone; autoplay; fullscreen; encrypted-media; picture-in-picture"
+          : "autoplay; fullscreen; encrypted-media; picture-in-picture"}
         allowFullScreen
       />
     );

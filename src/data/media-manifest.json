@@ -133,6 +133,16 @@
       }
     ]
   },
+  "recreatures": {
+    "thumbnail": null,
+    "media": [
+      {
+        "type": "image",
+        "src": "/media/recreatures/01.webp"
+      }
+    ],
+    "process": []
+  },
   "what-could-you-be": {
     "thumbnail": {
       "type": "video",
@@ -174,5 +184,15 @@
         "src": "/media/what-could-you-be/process/04.png"
       }
     ]
+  },
+  "you-look-the-same": {
+    "thumbnail": null,
+    "media": [
+      {
+        "type": "image",
+        "src": "/media/you-look-the-same/01.webp"
+      }
+    ],
+    "process": []
   }
 }
