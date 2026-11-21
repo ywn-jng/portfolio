@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { projects } from "../data/projects";
-import FeedItem from "../components/FeedItem";
 import Footer from "../components/Footer";
 
 const featured = [
@@ -13,14 +12,12 @@ const featured = [
   { slug: "make-choice-fate", image: "home.webp" },
 ];
 
-export default function Home({ work = false }: { work?: boolean }) {
+export default function Home() {
   useEffect(() => {
-    document.title = work ? "Work — Yewon Jang" : "Yewon Jang";
-  }, [work]);
+    document.title = "Yewon Jang";
+  }, []);
 
   useEffect(() => {
-    if (work) return;
-
     const targets = ".home-gallery__tile, .site-nav a, .site-footer a";
     const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
     let highlighted: Element | null = null;
@@ -62,40 +59,32 @@ export default function Home({ work = false }: { work?: boolean }) {
       canHover.removeEventListener("change", reset);
       reset();
     };
-  }, [work]);
+  }, []);
 
   return (
     <main>
-      {work ? (
-        <section className="feed" aria-label="Work">
-          {projects.map((project, i) => (
-            <FeedItem key={project.slug} project={project} priority={i === 0} />
-          ))}
-        </section>
-      ) : (
-        <section className="home-gallery" aria-label="Selected work">
-          {featured.map(({ slug, image }, index) => {
-            const project = projects.find((item) => item.slug === slug);
-            if (!project) return null;
+      <section className="home-gallery" aria-label="Selected work">
+        {featured.map(({ slug, image }, index) => {
+          const project = projects.find((item) => item.slug === slug);
+          if (!project) return null;
 
-            return (
-              <Link
-                key={slug}
-                to={`/${slug}`}
-                className={`home-gallery__tile home-gallery__tile--${slug}`}
-                aria-label={project.title}
-              >
-                <img
-                  src={`/media/${slug}/${image}`}
-                  alt=""
-                  loading={index < 2 ? "eager" : "lazy"}
-                  decoding="async"
-                />
-              </Link>
-            );
-          })}
-        </section>
-      )}
+          return (
+            <Link
+              key={slug}
+              to={`/${slug}`}
+              className={`home-gallery__tile home-gallery__tile--${slug}`}
+              aria-label={project.title}
+            >
+              <img
+                src={`/media/${slug}/${image}`}
+                alt=""
+                loading={index < 2 ? "eager" : "lazy"}
+                decoding="async"
+              />
+            </Link>
+          );
+        })}
+      </section>
       <Footer />
     </main>
   );

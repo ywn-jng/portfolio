@@ -65,7 +65,7 @@ export default function Project() {
       <div className="project-grid">
         {/* Column 1 — information */}
         <aside className="project-info">
-          <Link to="/work" className="nav-btn page-back-arrow" aria-label="Back to Work">
+          <Link to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
             <ArrowLeft />
           </Link>
           <h1>{project.title}</h1>

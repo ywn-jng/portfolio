@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -19,7 +19,7 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/work" element={<Home work />} />
+        <Route path="/work" element={<Navigate to="/" replace />} />
         <Route path="/info" element={<About />} />
         <Route path="/:slug/process" element={<Process />} />
         <Route path="/:slug" element={<Project />} />
