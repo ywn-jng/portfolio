@@ -7,8 +7,8 @@ import Media from "../components/Media";
 const featured = [
   "what-could-you-be",
   "lets-hug",
-  "make-choice-fate",
   "recreatures",
+  "make-choice-fate",
   "you-look-the-same",
   "makuly",
 ];
