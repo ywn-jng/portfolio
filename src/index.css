@@ -552,25 +552,27 @@ video {
 }
 
 /* About uses the same page grid as the work and navigation. */
+body:has(.about-page) {
+  overflow-x: clip;
+}
 .about-page {
   position: relative;
   min-height: max(100dvh, calc(85 * var(--row)));
+  padding-top: var(--page-start);
   line-height: 1.2;
 }
-.about-page > .page-back-arrow {
-  top: calc(var(--page-start) - 0.5 * var(--row));
-  left: var(--edge);
+.about-intro {
+  position: sticky;
+  top: var(--page-start);
+  z-index: 1;
+  width: calc(var(--description-columns) * var(--column));
+  margin-inline-start: var(--edge);
+  background: var(--bg);
 }
-.about-bio,
 .about-credits {
   position: absolute;
   left: calc(var(--edge) + var(--about-x) * var(--column));
   top: calc(var(--page-start) + var(--about-y) * var(--row));
-}
-.about-bio {
-  --about-x: 0;
-  top: var(--page-start);
-  width: calc(var(--description-columns) * var(--column));
 }
 .about-bio a,
 .about-credit-name {
@@ -618,7 +620,9 @@ video {
   .about-page {
     padding: var(--page-start) var(--edge) 12vh;
   }
-  .about-bio,
+  .about-intro {
+    margin-inline-start: 0;
+  }
   .about-credits {
     position: relative;
     inset: auto;

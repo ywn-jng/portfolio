@@ -57,16 +57,18 @@ export default function About() {
 
   return (
     <main className="about-page">
-      <Link to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
-        <ArrowLeft />
-      </Link>
-      <p className="about-bio">
-        <Link to="/">{SITE.name}</Link> is a London-based visual maker originally from Korea.
-        She recently graduated from the <a href="https://www.rca.ac.uk/study/programme-finder/visual-communication-ma/">RCA</a> with an MA in
-        Visual Communication, where she worked across forms of visual experimentation.
-        Her practice explores ways of making images through digital media, including creative
-        coding, graphic design and moving image.
-      </p>
+      <div className="about-intro">
+        <Link to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
+          <ArrowLeft />
+        </Link>
+        <p className="about-bio">
+          <Link to="/">{SITE.name}</Link> is a London-based visual maker originally from Korea.
+          She recently graduated from the <a href="https://www.rca.ac.uk/study/programme-finder/visual-communication-ma/">RCA</a> with an MA in
+          Visual Communication, where she worked across forms of visual experimentation.
+          Her practice explores ways of making images through digital media, including creative
+          coding, graphic design and moving image.
+        </p>
+      </div>
       <Credits group="experience" label="Work experience" entries={experience} />
       <Credits group="education" label="Education" entries={education} />
       <Credits group="exhibitions" label="Exhibitions and screenings" entries={exhibitions} />
