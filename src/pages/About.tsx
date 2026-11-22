@@ -1,5 +1,6 @@
 import { useEffect, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
+import ArrowLeft from "../components/ArrowLeft";
 import { SITE } from "../data/projects";
 
 type Entry = {
@@ -56,6 +57,9 @@ export default function About() {
 
   return (
     <main className="about-page">
+      <Link to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
+        <ArrowLeft />
+      </Link>
       <p className="about-bio">
         <Link to="/">{SITE.name}</Link> is a London-based visual maker originally from Korea.
         She recently graduated from the <a href="https://www.rca.ac.uk/study/programme-finder/visual-communication-ma/">RCA</a> with an MA in

@@ -557,6 +557,10 @@ video {
   min-height: max(100dvh, calc(85 * var(--row)));
   line-height: 1.2;
 }
+.about-page > .page-back-arrow {
+  top: calc(var(--page-start) - 0.5 * var(--row));
+  left: var(--edge);
+}
 .about-bio,
 .about-credits {
   position: absolute;
