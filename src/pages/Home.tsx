@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { projects } from "../data/projects";
 import Footer from "../components/Footer";
+import Media from "../components/Media";
 
 const featured = [
-  { slug: "what-could-you-be", image: "home.webp" },
-  { slug: "lets-hug", image: "home.webp" },
-  { slug: "makuly", image: "home.webp" },
-  { slug: "you-look-the-same", image: "01.webp" },
-  { slug: "recreatures", image: "01.webp" },
-  { slug: "make-choice-fate", image: "home.webp" },
+  "what-could-you-be",
+  "lets-hug",
+  "makuly",
+  "you-look-the-same",
+  "recreatures",
+  "make-choice-fate",
 ];
 
 export default function Home() {
@@ -64,23 +65,18 @@ export default function Home() {
   return (
     <main>
       <section className="home-gallery" aria-label="Selected work">
-        {featured.map(({ slug, image }, index) => {
+        {featured.map((slug, index) => {
           const project = projects.find((item) => item.slug === slug);
-          if (!project) return null;
+          if (!project?.homeMedia) return null;
 
           return (
-            <Link
+            <Link target="_blank" rel="noopener noreferrer"
               key={slug}
               to={`/${slug}`}
               className={`home-gallery__tile home-gallery__tile--${slug}`}
               aria-label={project.title}
             >
-              <img
-                src={`/media/${slug}/${image}`}
-                alt=""
-                loading={index < 2 ? "eager" : "lazy"}
-                decoding="async"
-              />
+              <Media item={project.homeMedia} fit="cover" priority={index < 2 || project.homeMedia.type === "video"} />
             </Link>
           );
         })}

@@ -156,7 +156,7 @@ export default function MakeChoiceFate() {
           return (
             <span key={g.id} className="mcf-letter" style={{ ...g.style, height: `${g.h}px` }}>
               <img
-                src={`${IMG_BASE}${g.char}.png`}
+                src={`${IMG_BASE}${g.char}.webp`}
                 alt={g.char}
                 style={{ height: `${g.h}px` }}
                 draggable={false}

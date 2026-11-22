@@ -8,8 +8,7 @@ const MEDIA_DIR = resolve(__dirname, "public/media");
 
 /**
  * Regenerates src/data/media-manifest.json whenever files inside
- * /public/media are added, removed or renamed during dev — so swapping a
- * thumbnail (e.g. .mov → .gif) is picked up without restarting the server.
+ * /public/media are added, removed or renamed during dev.
  */
 function mediaManifestPlugin(): Plugin {
   const rescan = (file: string) => {

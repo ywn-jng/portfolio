@@ -4,18 +4,6 @@ import { projects } from "../data/projects";
 import Media from "../components/Media";
 import ArrowLeft from "../components/ArrowLeft";
 
-const ArrowRight = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path
-      d="M5 12H19M19 12L12 5M19 12L12 19"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 function MediaBlock({
   item,
   priority,
@@ -32,13 +20,12 @@ function MediaBlock({
 
 export default function Project() {
   const { slug } = useParams();
-  const index = projects.findIndex((p) => p.slug === slug);
-  const project = index >= 0 ? projects[index] : undefined;
-  const prev = index > 0 ? projects[index - 1] : undefined;
-  const next =
-    index >= 0 && index < projects.length - 1
-      ? projects[index + 1]
-      : undefined;
+  const index = projects.findIndex((item) => item.slug === slug);
+  const project = projects[index];
+  const neighbors = [
+    { label: "Previous", project: projects[index - 1], reverse: false },
+    { label: "Next", project: projects[index + 1], reverse: true },
+  ];
 
   useEffect(() => {
     if (project) document.title = `${project.title} — Yewon Jang`;
@@ -51,7 +38,7 @@ export default function Project() {
         <div className="project-grid">
           <div className="project-info">
             <h1>Not found</h1>
-            <Link to="/" className="project-back">
+            <Link target="_blank" rel="noopener noreferrer" to="/" className="project-back">
               Index
             </Link>
           </div>
@@ -65,7 +52,7 @@ export default function Project() {
       <div className="project-grid">
         {/* Column 1 — information */}
         <aside className="project-info">
-          <Link to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
+          <Link target="_blank" rel="noopener noreferrer" to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
             <ArrowLeft />
           </Link>
           <h1>{project.title}</h1>
@@ -81,38 +68,21 @@ export default function Project() {
         </section>
       </div>
 
-      {/* Fixed prev/next — consistent across every project page */}
       <nav className="project-nav" aria-label="Project navigation">
-        {prev ? (
-          <Link
-            to={`/${prev.slug}`}
-            className="nav-btn"
-            aria-label={`Previous project: ${prev.title}`}
-            title={prev.title}
-          >
-            <ArrowLeft />
-          </Link>
-        ) : (
-          <span className="nav-btn disabled" aria-hidden="true">
-            <ArrowLeft />
-          </span>
-        )}
-        {next ? (
-          <Link
-            to={`/${next.slug}`}
-            className="nav-btn"
-            aria-label={`Next project: ${next.title}`}
-            title={next.title}
-          >
-            <ArrowRight />
-          </Link>
-        ) : (
-          <span className="nav-btn disabled" aria-hidden="true">
-            <ArrowRight />
-          </span>
-        )}
+        {neighbors.map(({ label, project: neighbor, reverse }) => (
+          neighbor ? (
+            <Link target="_blank" rel="noopener noreferrer" key={label} className="nav-btn"
+              to={`/${neighbor.slug}`} aria-label={`${label} project: ${neighbor.title}`} title={neighbor.title}>
+              <span className={reverse ? "project-arrow-next" : undefined}><ArrowLeft /></span>
+            </Link>
+          ) : (
+            <span key={label} className="nav-btn disabled" aria-hidden="true">
+              <span className={reverse ? "project-arrow-next" : undefined}><ArrowLeft /></span>
+            </span>
+          )
+        ))}
         {project.process.length > 0 && (
-          <Link to={`/${project.slug}/process`} className="project-process-link">
+          <Link target="_blank" rel="noopener noreferrer" to={`/${project.slug}/process`} className="project-process-link">
             Process
           </Link>
         )}

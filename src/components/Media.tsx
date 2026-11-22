@@ -6,7 +6,6 @@ const NativeComponents: Record<string, React.LazyExoticComponent<React.Component
   "make-choice-fate": lazy(() => import("./MakeChoiceFate")),
   "lets-hug": lazy(() => import("./LetsHug")),
   "makuly-model": lazy(() => import("./MakulyModel")),
-  "makuly-thumbnail": lazy(() => import("./MakulyThumbnail")),
 };
 
 type Props = {

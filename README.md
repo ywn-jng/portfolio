@@ -26,10 +26,10 @@ npm run preview
 
 ```
 public/
-  fonts/        ABC Diatype variable font
+  fonts/        Bona Nova web fonts
   media/        one folder per project  ← your real assets live here
     my-project/
-      thumbnail.png      homepage preview (image OR video)
+      home.webp or home.mp4   optional homepage media
       01.png  02.mp4 …   detail media, shown in numerical order
 scripts/
   scan-media.mjs   scans public/media → src/data/media-manifest.json
@@ -41,7 +41,7 @@ src/
     Home.tsx       homepage visual feed
     Project.tsx    project detail page (4-column grid)
     About.tsx      info page
-  components/      Header, Footer, FeedItem, Media
+  components/      Header, Footer, Media
   index.css        all styling (theme, grid, layout)
 ```
 
@@ -51,7 +51,7 @@ The site reads the **folders inside `public/media/`**. You almost never touch
 code to add work.
 
 1. Create a folder named after the project slug, e.g. `public/media/my-project/`.
-2. Add a `thumbnail.*` (image or video) — this is the homepage preview.
+2. For a featured project, add a `home.*` image or video, or use the first detail image.
 3. Add media files named `01`, `02`, `03`, … — these appear on the detail page
    in numerical order. Images (`png jpg jpeg gif webp avif svg`) and videos
    (`mp4 mov webm m4v`) are detected automatically. GIFs animate inline; videos
@@ -76,6 +76,6 @@ const META = {
 };
 ```
 
-Use `ORDER` (also in `projects.ts`) to set the homepage sequence. Any project
-folder without a `META` entry still shows up — it just uses the folder name as
-its title until you add the text.
+Use `featured` in `Home.tsx` to select and order homepage projects, and
+`ORDER` in `projects.ts` for project-page navigation. Projects without a
+`META` entry use their folder name as the title.

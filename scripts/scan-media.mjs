@@ -3,7 +3,7 @@
  *
  * Each subfolder of /public/media is treated as one project (folder name = slug).
  * Inside a folder:
- *   - thumbnail.*          → homepage preview (image or video)
+ *   - home.*               → optional homepage image or video
  *   - 01.*, 02.*, 03.* …   → detail-page media, shown in numerical order
  *
  * File type (image vs video) is inferred from the extension.
@@ -39,7 +39,7 @@ const isDir = (p) => {
 
 /**
  * Build the manifest and write it to disk.
- * @returns {{ slug: string, thumbnail: string, media: number }[]} summary
+ * @returns {{ slug: string, media: number }[]} summary
  */
 export function scanMedia({ silent = false } = {}) {
   const manifest = {};
@@ -52,7 +52,7 @@ export function scanMedia({ silent = false } = {}) {
     const dir = join(MEDIA_DIR, slug);
     const files = readdirSync(dir).filter((f) => !f.startsWith("."));
 
-    let thumbnail = null;
+    let homeMedia = null;
     const numbered = [];
 
     for (const file of files) {
@@ -62,8 +62,8 @@ export function scanMedia({ silent = false } = {}) {
       const name = basename(file, extname(file)).toLowerCase();
       const src = `/media/${slug}/${file}`;
 
-      if (name === "thumbnail") {
-        thumbnail = { type, src };
+      if (name === "home") {
+        homeMedia = { type, src };
         continue;
       }
 
@@ -96,7 +96,7 @@ export function scanMedia({ silent = false } = {}) {
     }
 
     manifest[slug] = {
-      thumbnail,
+      homeMedia,
       media: numbered.map(({ type, src }) => ({ type, src })),
       process,
     };
@@ -106,7 +106,6 @@ export function scanMedia({ silent = false } = {}) {
 
   const summary = Object.entries(manifest).map(([slug, data]) => ({
     slug,
-    thumbnail: data.thumbnail ? data.thumbnail.type : "MISSING",
     media: data.media.length,
     process: data.process.length,
   }));
@@ -117,7 +116,7 @@ export function scanMedia({ silent = false } = {}) {
     );
     for (const s of summary) {
       console.log(
-        `  • ${s.slug}: thumbnail=${s.thumbnail}, media=${s.media}, process=${s.process}`
+        `  • ${s.slug}: media=${s.media}, process=${s.process}`
       );
     }
   }

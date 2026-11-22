@@ -1,8 +1,8 @@
 {
   "lets-hug": {
-    "thumbnail": {
+    "homeMedia": {
       "type": "image",
-      "src": "/media/lets-hug/thumbnail.gif"
+      "src": "/media/lets-hug/home.webp"
     },
     "media": [
       {
@@ -15,21 +15,21 @@
       },
       {
         "type": "image",
-        "src": "/media/lets-hug/03.png"
+        "src": "/media/lets-hug/03.webp"
       }
     ],
     "process": [
       {
         "type": "image",
-        "src": "/media/lets-hug/process/01.png"
+        "src": "/media/lets-hug/process/01.webp"
       },
       {
         "type": "image",
-        "src": "/media/lets-hug/process/02.png"
+        "src": "/media/lets-hug/process/02.webp"
       },
       {
         "type": "image",
-        "src": "/media/lets-hug/process/03.png"
+        "src": "/media/lets-hug/process/03.webp"
       },
       {
         "type": "image",
@@ -38,51 +38,51 @@
     ]
   },
   "make-choice-fate": {
-    "thumbnail": {
+    "homeMedia": {
       "type": "image",
-      "src": "/media/make-choice-fate/thumbnail.png"
+      "src": "/media/make-choice-fate/home.webp"
     },
     "media": [
       {
         "type": "image",
-        "src": "/media/make-choice-fate/01.png"
+        "src": "/media/make-choice-fate/01.webp"
       },
       {
         "type": "image",
-        "src": "/media/make-choice-fate/03.png"
+        "src": "/media/make-choice-fate/03.webp"
       },
       {
         "type": "image",
-        "src": "/media/make-choice-fate/04.png"
+        "src": "/media/make-choice-fate/04.webp"
       },
       {
         "type": "image",
-        "src": "/media/make-choice-fate/05.png"
+        "src": "/media/make-choice-fate/05.webp"
       }
     ],
     "process": [
       {
         "type": "image",
-        "src": "/media/make-choice-fate/process/01.png"
+        "src": "/media/make-choice-fate/process/01.webp"
       },
       {
         "type": "image",
-        "src": "/media/make-choice-fate/process/02.PNG"
+        "src": "/media/make-choice-fate/process/02.webp"
       },
       {
         "type": "image",
-        "src": "/media/make-choice-fate/process/03.PNG"
+        "src": "/media/make-choice-fate/process/03.webp"
       },
       {
         "type": "image",
-        "src": "/media/make-choice-fate/process/04.PNG"
+        "src": "/media/make-choice-fate/process/04.webp"
       }
     ]
   },
   "makuly": {
-    "thumbnail": {
+    "homeMedia": {
       "type": "image",
-      "src": "/media/makuly/thumbnail.png"
+      "src": "/media/makuly/home.webp"
     },
     "media": [
       {
@@ -95,46 +95,49 @@
       },
       {
         "type": "image",
-        "src": "/media/makuly/05.png"
+        "src": "/media/makuly/05.webp"
       },
       {
         "type": "image",
-        "src": "/media/makuly/06.png"
+        "src": "/media/makuly/06.webp"
       },
       {
         "type": "image",
-        "src": "/media/makuly/07.png"
+        "src": "/media/makuly/07.webp"
       }
     ],
     "process": [
       {
         "type": "image",
-        "src": "/media/makuly/process/01.jpg"
+        "src": "/media/makuly/process/01.webp"
       },
       {
         "type": "image",
-        "src": "/media/makuly/process/03.PNG"
+        "src": "/media/makuly/process/03.webp"
       },
       {
         "type": "image",
-        "src": "/media/makuly/process/04.jpg"
+        "src": "/media/makuly/process/04.webp"
       },
       {
         "type": "image",
-        "src": "/media/makuly/process/05.jpg"
+        "src": "/media/makuly/process/05.webp"
       },
       {
         "type": "image",
-        "src": "/media/makuly/process/06.jpg"
+        "src": "/media/makuly/process/06.webp"
       },
       {
         "type": "image",
-        "src": "/media/makuly/process/07.jpg"
+        "src": "/media/makuly/process/07.webp"
       }
     ]
   },
   "recreatures": {
-    "thumbnail": null,
+    "homeMedia": {
+      "type": "video",
+      "src": "/media/recreatures/home.mp4"
+    },
     "media": [
       {
         "type": "image",
@@ -144,49 +147,49 @@
     "process": []
   },
   "what-could-you-be": {
-    "thumbnail": {
-      "type": "video",
-      "src": "/media/what-could-you-be/thumbnail.mov"
+    "homeMedia": {
+      "type": "image",
+      "src": "/media/what-could-you-be/home.webp"
     },
     "media": [
       {
         "type": "image",
-        "src": "/media/what-could-you-be/01.png"
+        "src": "/media/what-could-you-be/01.webp"
       },
       {
         "type": "image",
-        "src": "/media/what-could-you-be/02.png"
+        "src": "/media/what-could-you-be/02.webp"
       },
       {
         "type": "image",
-        "src": "/media/what-could-you-be/03.png"
+        "src": "/media/what-could-you-be/03.webp"
       },
       {
         "type": "image",
-        "src": "/media/what-could-you-be/04.png"
+        "src": "/media/what-could-you-be/04.webp"
       }
     ],
     "process": [
       {
         "type": "image",
-        "src": "/media/what-could-you-be/process/01.png"
+        "src": "/media/what-could-you-be/process/01.webp"
       },
       {
         "type": "image",
-        "src": "/media/what-could-you-be/process/02.png"
+        "src": "/media/what-could-you-be/process/02.webp"
       },
       {
         "type": "image",
-        "src": "/media/what-could-you-be/process/03.png"
+        "src": "/media/what-could-you-be/process/03.webp"
       },
       {
         "type": "image",
-        "src": "/media/what-could-you-be/process/04.png"
+        "src": "/media/what-could-you-be/process/04.webp"
       }
     ]
   },
   "you-look-the-same": {
-    "thumbnail": null,
+    "homeMedia": null,
     "media": [
       {
         "type": "image",

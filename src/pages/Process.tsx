@@ -107,7 +107,7 @@ export default function Process() {
     return (
       <main className="process-page">
         <div className="process-head">
-          <Link to="/" className="process-back">
+          <Link target="_blank" rel="noopener noreferrer" to="/" className="process-back">
             Index
           </Link>
         </div>
@@ -119,7 +119,7 @@ export default function Process() {
   return (
     <main className="process-page">
       <div className="process-head">
-        <Link
+        <Link target="_blank" rel="noopener noreferrer"
           to={`/${project.slug}`}
           className="nav-btn page-back-arrow"
           aria-label={`Back to ${project.title}`}
@@ -127,7 +127,7 @@ export default function Process() {
           <ArrowLeft />
         </Link>
         <h1 className="process-title">
-          <Link to={`/${project.slug}`} className="process-back">{project.title}</Link>
+          <Link target="_blank" rel="noopener noreferrer" to={`/${project.slug}`} className="process-back">{project.title}</Link>
         </h1>
         {images.length > 0 && (
           <div className="process-controls" role="group" aria-label="Process playback">
