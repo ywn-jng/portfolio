@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties } from "react";
+import { lazy, Suspense, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import type { MediaItem } from "../data/projects";
 import { useLightbox } from "./Lightbox";
 
@@ -13,6 +13,7 @@ type Props = {
   /** "cover" fills a fixed-height frame (feed); "flow" keeps natural height (detail) */
   fit?: "cover" | "flow";
   priority?: boolean;
+  soundToggle?: boolean;
   /** when true, images open in the lightbox on click */
   zoomable?: boolean;
 };
@@ -27,6 +28,7 @@ export default function Media({
   fit = "flow",
   priority = false,
   zoomable = false,
+  soundToggle = false,
 }: Props) {
   const { open } = useLightbox();
   const style =
@@ -78,6 +80,7 @@ export default function Media({
         motionFallback={item.motionFallback}
         style={style}
         priority={priority}
+        soundToggle={soundToggle}
       />
     );
   }
@@ -101,17 +104,20 @@ function AutoplayVideo({
   motionFallback,
   style,
   priority,
+  soundToggle,
 }: {
   src: string;
   poster?: string;
   motionFallback?: string;
   style?: CSSProperties;
   priority: boolean;
+  soundToggle: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const video = ref.current;
     if (!video) return;
 
@@ -144,7 +150,7 @@ function AutoplayVideo({
       poster={poster}
       style={style}
       autoPlay
-      muted
+      muted={!soundOn}
       loop
       playsInline
       controls={false}
@@ -154,12 +160,44 @@ function AutoplayVideo({
       onPause={motionFallback ? () => setPlaying(false) : undefined}
     />
   );
-  if (!motionFallback) return video;
-
-  return (
-    <span className="home-motion-cover" data-playing={playing}>
-      <img src={motionFallback} alt="" loading="lazy" />
+  const playback = motionFallback ? (
+    <span className="motion-cover" data-playing={playing}>
+      <img src={motionFallback} alt="" loading={priority ? "eager" : "lazy"} />
       {video}
     </span>
-  );
+  ) : video;
+
+  if (soundToggle) {
+    const toggleSound = () => {
+      const element = ref.current;
+      if (!element) return;
+      const next = element.muted;
+      element.muted = !next;
+      setSoundOn(next);
+      if (next && element.paused) void element.play().catch(() => {});
+    };
+
+    return (
+      <div className="project-sound-video">
+        {playback}
+        <button
+          type="button"
+          className="project-sound-toggle"
+          aria-label="Sound"
+          aria-pressed={soundOn}
+          title={soundOn ? "Mute" : "Unmute"}
+          onClick={toggleSound}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M11 5 6 9H3v6h3l5 4z" />
+            {soundOn
+              ? <path d="M15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12" />
+              : <path d="m16 10 5 5m0-5-5 5" />}
+          </svg>
+        </button>
+      </div>
+    );
+  }
+  return playback;
 }

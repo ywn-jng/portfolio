@@ -29,7 +29,7 @@ export default function Process() {
     setReady(false);
     setPaused(false);
     const track = trackRef.current;
-    if (!track || images.length === 0) return;
+    if (!track || images.length < 2) return;
 
     // Cancel any previous animation (e.g. on slug change)
     animRef.current?.cancel();
@@ -129,7 +129,7 @@ export default function Process() {
         <h1 className="process-title">
           <Link target="_blank" rel="noopener noreferrer" to={`/${project.slug}`} className="process-back">{project.title}</Link>
         </h1>
-        {images.length > 0 && (
+        {images.length > 1 && (
           <div className="process-controls" role="group" aria-label="Process playback">
             <button
               type="button"
@@ -174,8 +174,8 @@ export default function Process() {
         <>
           <div className="process" aria-label={`${project.title} — process`}>
             {/* ref is on the track; no --marquee-duration needed (WAAPI drives it) */}
-            <div className="process-track" ref={trackRef}>
-              {[0, 1].map((set) =>
+            <div className={images.length === 1 ? "process-track process-track--single" : "process-track"} ref={trackRef}>
+              {(images.length === 1 ? [0] : [0, 1]).map((set) =>
                 images.map((item, i) => (
                   <div
                     className="process-item"

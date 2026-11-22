@@ -8,8 +8,8 @@ const featured = [
   "what-could-you-be",
   "lets-hug",
   "makuly",
-  "you-look-the-same",
   "recreatures",
+  "you-look-the-same",
   "make-choice-fate",
 ];
 

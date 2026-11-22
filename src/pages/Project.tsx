@@ -7,13 +7,15 @@ import ArrowLeft from "../components/ArrowLeft";
 function MediaBlock({
   item,
   priority,
+  soundToggle,
 }: {
   item: Parameters<typeof Media>[0]["item"];
   priority?: boolean;
+  soundToggle?: boolean;
 }) {
   return (
     <div className="media-block">
-      <Media item={item} fit="flow" priority={priority} zoomable />
+      <Media item={item} fit="flow" priority={priority} soundToggle={soundToggle} zoomable />
     </div>
   );
 }
@@ -57,13 +59,26 @@ export default function Project() {
           </Link>
           <h1>{project.title}</h1>
 
-          {project.description && <p className="project-desc">{project.description}</p>}
+          {project.description && (
+            <p className="project-desc">
+              {typeof project.description === "string" ? project.description : project.description.map((part) => (
+                typeof part === "string" ? part : "href" in part ? (
+                  <a key={part.href} href={part.href} target="_blank" rel="noopener noreferrer">{part.text}</a>
+                ) : <em key={part.emphasis}>{part.emphasis}</em>
+              ))}
+            </p>
+          )}
         </aside>
 
         {/* Columns 2–4 — continuous, full-width media */}
         <section className="project-media">
           {project.media.map((item, i) => (
-            <MediaBlock key={i} item={item} priority={i === 0} />
+            <MediaBlock
+              key={item.src}
+              item={item}
+              priority={i === 0}
+              soundToggle={project.slug === "recreatures" && i === 0}
+            />
           ))}
         </section>
       </div>

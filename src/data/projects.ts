@@ -40,12 +40,14 @@ export type InfoRow = {
   value: string;
 };
 
+type ProjectDescription = string | (string | { text: string; href: string } | { emphasis: string })[];
+
 export type Project = {
   slug: string;
   title: string;
   year: string;
   category: string;
-  description: string;
+  description: ProjectDescription;
   info?: InfoRow[];
   homeMedia?: MediaItem;
   /** Ordered, full-width media for the detail page */
@@ -104,7 +106,7 @@ type Meta = {
   year: string;
   category: string;
   role?: string;
-  description: string;
+  description: ProjectDescription;
 };
 
 const META: Record<string, Meta> = {
@@ -112,13 +114,21 @@ const META: Record<string, Meta> = {
     title: "You Look the Same",
     category: "",
     year: "",
-    description: "",
+    description: [
+      "I found this 200-year-old book in an antique shop. It celebrates the unchanging nature of the natural world while criticising humans for constantly changing. In that season, a friend who I hadn’t seen in years said to me, ",
+      { emphasis: "“You look the same,”" },
+      " as a compliment.\n\nWhy do we perceive change as something to be avoided?\nWe must be hatched or go bad.",
+    ],
   },
   recreatures: {
     title: "Recreatures",
     category: "3D Title Design",
     year: "2026",
-    description: "",
+    description: [
+      "I was commissioned by a filmmaker at STINK to create a 3D title for a film produced for a jewellery brand, ",
+      { text: "kuku laboratory", href: "https://www.instagram.com/kuku.laboratory/" },
+      ". I aimed to create a new species yet to be discovered in the deep sea.",
+    ],
   },
   "what-could-you-be": {
     title: "What Could You Be",
@@ -231,7 +241,12 @@ function buildProjects(): Project[] {
       info,
       homeMedia,
       media: (() => {
-        const base = [...(EMBEDS[slug] ?? []), ...entry.media];
+        const media = slug === "recreatures"
+          ? entry.media.map((item) => item.src === "/media/recreatures/01.mp4"
+            ? { ...item, motionFallback: "/media/recreatures/detail-fallback.webp" }
+            : item)
+          : entry.media;
+        const base = [...(EMBEDS[slug] ?? []), ...media];
         const ins = INSERTS[slug];
         if (!ins) return base;
         // Insert in reverse order so indices stay stable

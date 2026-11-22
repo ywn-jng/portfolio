@@ -141,11 +141,28 @@
     },
     "media": [
       {
+        "type": "video",
+        "src": "/media/recreatures/01.mp4"
+      },
+      {
         "type": "image",
-        "src": "/media/recreatures/01.webp"
+        "src": "/media/recreatures/02.png"
       }
     ],
-    "process": []
+    "process": [
+      {
+        "type": "image",
+        "src": "/media/recreatures/process/01.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/recreatures/process/02.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/recreatures/process/03.png"
+      }
+    ]
   },
   "what-could-you-be": {
     "homeMedia": {
@@ -197,6 +214,11 @@
         "src": "/media/you-look-the-same/01.webp"
       }
     ],
-    "process": []
+    "process": [
+      {
+        "type": "image",
+        "src": "/media/you-look-the-same/process/01.webp"
+      }
+    ]
   }
 }
