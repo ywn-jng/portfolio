@@ -213,14 +213,18 @@
     },
     "media": [
       {
-        "type": "image",
-        "src": "/media/you-look-the-same/01.webp"
+        "type": "video",
+        "src": "/media/you-look-the-same/01.mov"
       }
     ],
     "process": [
       {
         "type": "image",
         "src": "/media/you-look-the-same/process/01.webp"
+      },
+      {
+        "type": "image",
+        "src": "/media/you-look-the-same/process/02.webp"
       }
     ]
   }
