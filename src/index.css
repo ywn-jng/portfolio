@@ -887,8 +887,8 @@ body:has(.about-page) {
 }
 
 .home-gallery__tile--lets-hug {
-  --tile-start: 14;
-  --tile-span: 2;
+  --tile-start: 12;
+  --tile-span: 4;
   --tile-row: 30.5;
   --tile-ratio: 16 / 9;
 }
@@ -944,6 +944,10 @@ body:has(.about-page) {
 
   .home-gallery__tile:nth-child(even) {
     grid-column: 3 / -1;
+  }
+
+  .home-gallery__tile--lets-hug:nth-child(even) {
+    grid-column: 2 / -1;
   }
 
   .home-gallery__tile--recreatures:nth-child(even),

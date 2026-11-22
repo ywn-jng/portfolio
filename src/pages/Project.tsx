@@ -40,7 +40,7 @@ export default function Project() {
         <div className="project-grid">
           <div className="project-info">
             <h1>Not found</h1>
-            <Link target="_blank" rel="noopener noreferrer" to="/" className="project-back">
+            <Link to="/" className="project-back">
               Index
             </Link>
           </div>
@@ -49,12 +49,16 @@ export default function Project() {
     );
   }
 
+  const soundVideo = ["recreatures", "lets-hug"].includes(project.slug)
+    ? project.media.find((item) => item.type === "video")
+    : undefined;
+
   return (
     <main className="project">
       <div className="project-grid">
         {/* Column 1 — information */}
         <aside className="project-info">
-          <Link target="_blank" rel="noopener noreferrer" to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
+          <Link to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
             <ArrowLeft />
           </Link>
           <h1>{project.title}</h1>
@@ -76,8 +80,8 @@ export default function Project() {
             <MediaBlock
               key={item.src}
               item={item}
-              priority={i === 0}
-              soundToggle={project.slug === "recreatures" && i === 0}
+              priority={i === 0 || item === soundVideo}
+              soundToggle={item === soundVideo}
             />
           ))}
         </section>
@@ -86,7 +90,7 @@ export default function Project() {
       <nav className="project-nav" aria-label="Project navigation">
         {neighbors.map(({ label, project: neighbor, reverse }) => (
           neighbor ? (
-            <Link target="_blank" rel="noopener noreferrer" key={label} className="nav-btn"
+            <Link key={label} className="nav-btn"
               to={`/${neighbor.slug}`} aria-label={`${label} project: ${neighbor.title}`} title={neighbor.title}>
               <span className={reverse ? "project-arrow-next" : undefined}><ArrowLeft /></span>
             </Link>
@@ -97,7 +101,7 @@ export default function Project() {
           )
         ))}
         {project.process.length > 0 && (
-          <Link target="_blank" rel="noopener noreferrer" to={`/${project.slug}/process`} className="project-process-link">
+          <Link to={`/${project.slug}/process`} className="project-process-link">
             Process
           </Link>
         )}

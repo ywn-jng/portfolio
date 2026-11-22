@@ -45,7 +45,7 @@ export default function About() {
   return (
     <main className="about-page">
       <div className="about-intro">
-        <Link target="_blank" rel="noopener noreferrer" to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
+        <Link to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
           <ArrowLeft />
         </Link>
         <p className="about-bio">
@@ -59,13 +59,13 @@ export default function About() {
       <ParticleSpring entries={timeline} />
       <nav className="project-nav about-cv-download" aria-label="Contact and CV">
         {contacts.map(({ label, href, icon }) => (
-          <a target="_blank" rel="noopener noreferrer" key={label} className="nav-btn" href={href} aria-label={label} title={label}>
+          <a target={href.startsWith("mailto:") ? undefined : "_blank"} rel="noopener noreferrer" key={label} className="nav-btn" href={href} aria-label={label} title={label}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               {icon}
             </svg>
           </a>
         ))}
-        <a target="_blank" rel="noopener noreferrer" className="project-process-link" href="/yewon-jang-cv.pdf?v=d94ff3cb" download="CV (yewon jang).pdf">Download CV</a>
+        <a className="project-process-link" href="/yewon-jang-cv.pdf?v=d94ff3cb" download="CV (yewon jang).pdf">Download CV</a>
       </nav>
     </main>
   );

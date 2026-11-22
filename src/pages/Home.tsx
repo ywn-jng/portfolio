@@ -70,7 +70,7 @@ export default function Home() {
           if (!project?.homeMedia) return null;
 
           return (
-            <Link target="_blank" rel="noopener noreferrer"
+            <Link
               key={slug}
               to={`/${slug}`}
               className={`home-gallery__tile home-gallery__tile--${slug}`}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import p5 from "p5";
+import type p5 from "p5";
 
 // ml5 is loaded from CDN — it doesn't have a clean ESM build
 declare global {
@@ -94,8 +94,10 @@ export default function LetsHug() {
         return;
       }
 
+      let P5: typeof p5;
       try {
-        await loadMl5();
+        const [p5Module] = await Promise.all([import("p5"), loadMl5()]);
+        P5 = p5Module.default;
       } catch {
         fail("Could not load the pose model. Check your connection and try again.");
         return;
@@ -464,7 +466,7 @@ export default function LetsHug() {
       };
 
       if (!cancelled) {
-        p5Ref.current = new p5(sketch);
+        p5Ref.current = new P5(sketch);
       }
     })();
 
