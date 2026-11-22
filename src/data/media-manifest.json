@@ -207,7 +207,10 @@
     ]
   },
   "you-look-the-same": {
-    "homeMedia": null,
+    "homeMedia": {
+      "type": "image",
+      "src": "/media/you-look-the-same/home.webp"
+    },
     "media": [
       {
         "type": "image",
