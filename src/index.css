@@ -889,14 +889,14 @@ body:has(.about-page) {
 .home-gallery__tile--lets-hug {
   --tile-start: 12;
   --tile-span: 4;
-  --tile-row: 30.5;
-  --tile-ratio: 16 / 9;
+  --tile-row: 27.5;
+  --tile-ratio: 5 / 4;
 }
 
 .home-gallery__tile--makuly {
-  --tile-start: 4;
-  --tile-span: 3;
-  --tile-row: 52;
+  --tile-start: 9;
+  --tile-span: 8;
+  --tile-row: 116;
   --tile-ratio: 399 / 564;
 }
 
@@ -916,9 +916,9 @@ body:has(.about-page) {
 }
 
 .home-gallery__tile--make-choice-fate {
-  --tile-start: 9;
-  --tile-span: 8;
-  --tile-row: 116;
+  --tile-start: 4;
+  --tile-span: 4;
+  --tile-row: 52;
   --tile-ratio: 10667 / 6667;
 }
 
@@ -953,7 +953,8 @@ body:has(.about-page) {
   .home-gallery__tile--recreatures:nth-child(even),
   .home-gallery__tile--you-look-the-same,
   .home-gallery__tile--what-could-you-be,
-  .home-gallery__tile--make-choice-fate:nth-child(even) {
+  .home-gallery__tile--make-choice-fate,
+  .home-gallery__tile--makuly:nth-child(even) {
     grid-column: 1 / -1;
   }
 }

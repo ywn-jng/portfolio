@@ -18,24 +18,24 @@ const cameraSin = Math.sin(cameraTilt);
 const cameraCos = Math.cos(cameraTilt);
 const springRadius = 0.36;
 const categories = [
-  ["experience", "Work Experience"],
-  ["education", "Education"],
-  ["exhibition", "Exhibition"],
+  ["experience", "Work"],
+  ["education", "Study"],
+  ["exhibition", "Exhibit"],
 ] as const;
-// Stagger nearby labels in depth and across the center of the coil.
-const labelLayout: { rows: number; turn: number; radius: number; outside?: boolean }[] = [
-  { rows: 4.5, turn: 0.90, radius: 0.94, outside: true },
-  { rows: 5.3, turn: 0.37, radius: 0.57 },
-  { rows: 4.1, turn: 0.61, radius: 0.28 },
-  { rows: 5.4, turn: 0.11, radius: 0.77 },
-  { rows: 4.3, turn: 0.54, radius: 0.91 },
-  { rows: 4.9, turn: 0.28, radius: 0.43 },
-  { rows: 5.5, turn: 0.75, radius: 0.71, outside: true },
-  { rows: 4.2, turn: 0.19, radius: 0.35 },
-  { rows: 4.8, turn: 0.70, radius: 0.95, outside: true },
-  { rows: 4.4, turn: 0.43, radius: 0.58 },
-  { rows: 5.1, turn: 0.96, radius: 0.31 },
-  { rows: 4.6, turn: 0.32, radius: 0.83, outside: true },
+// Vary the spacing and depth, with longer arms that sweep past both edges.
+const labelLayout: { rows: number; turn: number; radius?: number; outside?: boolean }[] = [
+  { rows: 4.4, turn: 0.22, outside: true },
+  { rows: 5.7, turn: 0.69, outside: true },
+  { rows: 4.1, turn: 0.40, outside: true },
+  { rows: 5.6, turn: 0.90, radius: 0.58 },
+  { rows: 4.1, turn: 0.53, outside: true },
+  { rows: 5.2, turn: 0.08, radius: 0.43 },
+  { rows: 4.4, turn: 0.29, outside: true },
+  { rows: 5.4, turn: 0.63, radius: 0.47 },
+  { rows: 4.0, turn: 0.81, outside: true },
+  { rows: 4.9, turn: 0.35, radius: 0.62 },
+  { rows: 5.5, turn: 0.97, outside: true },
+  { rows: 3.8, turn: 0.76, outside: true },
 ];
 
 const helix = Array.from({ length: segmentCount + 1 }, (_, index) => {
@@ -184,7 +184,7 @@ export default function ParticleSpring({ entries }: { entries: TimelineEntry[] }
         const safeRadius = Math.max(0, (width - box.width) / 2 - 8);
         const targetRadius = placement.outside
           ? radius + box.width / 2 + Math.min(34, width * 0.04)
-          : radius * placement.radius;
+          : radius * (placement.radius ?? 1);
         const labelRadius = Math.min(safeRadius, targetRadius);
         const verticalOffset = (progress - 0.5 - point.height) * height * 0.92;
 

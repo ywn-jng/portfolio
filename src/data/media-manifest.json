@@ -11,7 +11,7 @@
       },
       {
         "type": "image",
-        "src": "/media/lets-hug/02.gif"
+        "src": "/media/lets-hug/02.webp"
       },
       {
         "type": "image",
@@ -214,7 +214,7 @@
     "media": [
       {
         "type": "video",
-        "src": "/media/you-look-the-same/01.mov"
+        "src": "/media/you-look-the-same/01.mp4"
       }
     ],
     "process": [

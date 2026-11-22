@@ -7,10 +7,10 @@ import Media from "../components/Media";
 const featured = [
   "what-could-you-be",
   "lets-hug",
-  "makuly",
+  "make-choice-fate",
   "recreatures",
   "you-look-the-same",
-  "make-choice-fate",
+  "makuly",
 ];
 
 export default function Home() {

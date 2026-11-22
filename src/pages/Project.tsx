@@ -49,7 +49,7 @@ export default function Project() {
     );
   }
 
-  const soundVideo = ["recreatures", "lets-hug"].includes(project.slug)
+  const soundVideo = ["recreatures", "lets-hug", "you-look-the-same"].includes(project.slug)
     ? project.media.find((item) => item.type === "video")
     : undefined;
 
