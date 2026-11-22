@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, type CSSProperties } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties } from "react";
 import type { MediaItem } from "../data/projects";
 import { useLightbox } from "./Lightbox";
 
@@ -75,6 +75,7 @@ export default function Media({
       <AutoplayVideo
         src={item.src}
         poster={item.poster}
+        motionFallback={item.motionFallback}
         style={style}
         priority={priority}
       />
@@ -97,15 +98,18 @@ export default function Media({
 function AutoplayVideo({
   src,
   poster,
+  motionFallback,
   style,
   priority,
 }: {
   src: string;
   poster?: string;
+  motionFallback?: string;
   style?: CSSProperties;
   priority: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     const video = ref.current;
@@ -121,14 +125,19 @@ function AutoplayVideo({
     play();
     video.addEventListener("loadeddata", play);
     video.addEventListener("canplay", play);
+    const visibility = motionFallback ? new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) play();
+    }) : null;
+    visibility?.observe(video);
 
     return () => {
+      visibility?.disconnect();
       video.removeEventListener("loadeddata", play);
       video.removeEventListener("canplay", play);
     };
-  }, [src]);
+  }, [src, motionFallback]);
 
-  return (
+  const video = (
     <video
       ref={ref}
       src={src}
@@ -141,6 +150,16 @@ function AutoplayVideo({
       controls={false}
       disablePictureInPicture
       preload={priority ? "auto" : "metadata"}
+      onPlaying={motionFallback ? () => setPlaying(true) : undefined}
+      onPause={motionFallback ? () => setPlaying(false) : undefined}
     />
+  );
+  if (!motionFallback) return video;
+
+  return (
+    <span className="home-motion-cover" data-playing={playing}>
+      <img src={motionFallback} alt="" loading="lazy" />
+      {video}
+    </span>
   );
 }

@@ -95,6 +95,10 @@ export function scanMedia({ silent = false } = {}) {
       for (const { src } of pnumbered) process.push({ type: "image", src });
     }
 
+    if (homeMedia?.type === "video" && files.includes("home-fallback.webp")) {
+      homeMedia.motionFallback = `/media/${slug}/home-fallback.webp`;
+    }
+
     manifest[slug] = {
       homeMedia,
       media: numbered.map(({ type, src }) => ({ type, src })),

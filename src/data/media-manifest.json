@@ -136,7 +136,8 @@
   "recreatures": {
     "homeMedia": {
       "type": "video",
-      "src": "/media/recreatures/home.mp4"
+      "src": "/media/recreatures/home.mp4",
+      "motionFallback": "/media/recreatures/home-fallback.webp"
     },
     "media": [
       {

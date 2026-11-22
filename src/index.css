@@ -823,6 +823,21 @@ body:has(.about-page) {
   object-fit: cover;
 }
 
+.home-motion-cover {
+  position: relative;
+  display: block;
+  height: 100%;
+  pointer-events: none;
+}
+.home-motion-cover video {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.home-motion-cover[data-playing="true"] video {
+  opacity: 1;
+}
+
 .home-gallery__tile--what-could-you-be {
   --tile-start: 2;
   --tile-span: 9;
@@ -941,7 +956,7 @@ body:has(.about-page) {
   }
 
   body:has(.home-gallery)
-    :is(.home-gallery__tile:not([data-hover-highlight]) :is(img, video),
+    :is(.home-gallery__tile:not([data-hover-highlight]) > :is(img, video, .home-motion-cover),
         .site-nav a:not([data-hover-highlight]),
         .site-footer a:not([data-hover-highlight]),
         .site-footer .f-right) {

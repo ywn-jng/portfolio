@@ -23,6 +23,7 @@ export type MediaItem = {
   /** Path relative to /public (image/video), a full URL (embed), or a component id (native) */
   src: string;
   poster?: string;
+  motionFallback?: string;
   /** Direct viewing link for an embedded film. */
   watchUrl?: string;
   alt?: string;
