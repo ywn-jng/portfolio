@@ -569,6 +569,9 @@ body:has(.about-page) {
   margin-inline-start: var(--edge);
   background: var(--bg);
 }
+.about-cv-download {
+  min-height: calc(32px + 2 * var(--pad));
+}
 .about-credits {
   position: absolute;
   left: calc(var(--edge) + var(--about-x) * var(--column));

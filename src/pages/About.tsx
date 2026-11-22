@@ -69,6 +69,9 @@ export default function About() {
           coding, graphic design and moving image.
         </p>
       </div>
+      <div className="project-nav about-cv-download">
+        <a className="project-process-link" href="/yewon-jang-cv.pdf" download="CV (yewon jang).pdf">Download CV</a>
+      </div>
       <Credits group="experience" label="Work experience" entries={experience} />
       <Credits group="education" label="Education" entries={education} />
       <Credits group="exhibitions" label="Exhibitions and screenings" entries={exhibitions} />
