@@ -7,15 +7,13 @@ import ArrowLeft from "../components/ArrowLeft";
 function MediaBlock({
   item,
   priority,
-  soundToggle,
 }: {
   item: Parameters<typeof Media>[0]["item"];
   priority?: boolean;
-  soundToggle?: boolean;
 }) {
   return (
     <div className="media-block">
-      <Media item={item} fit="flow" priority={priority} soundToggle={soundToggle} zoomable />
+      <Media item={item} fit="flow" priority={priority} zoomable />
     </div>
   );
 }
@@ -49,9 +47,7 @@ export default function Project() {
     );
   }
 
-  const soundVideo = ["recreatures", "lets-hug", "you-look-the-same"].includes(project.slug)
-    ? project.media.find((item) => item.type === "video")
-    : undefined;
+  const firstVideo = project.media.find((item) => item.type === "video");
 
   return (
     <main className="project">
@@ -61,7 +57,10 @@ export default function Project() {
           <Link to="/" className="nav-btn page-back-arrow" aria-label="Back to Work">
             <ArrowLeft />
           </Link>
-          <h1>{project.title}</h1>
+          <h1>
+            {project.title}
+            {project.status && <> <em className="project-title-status">{project.status}</em></>}
+          </h1>
 
           {project.description && (
             <p className="project-desc">
@@ -80,8 +79,7 @@ export default function Project() {
             <MediaBlock
               key={item.src}
               item={item}
-              priority={i === 0 || item === soundVideo}
-              soundToggle={item === soundVideo}
+              priority={i === 0 || item === firstVideo}
             />
           ))}
         </section>

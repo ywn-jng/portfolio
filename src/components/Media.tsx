@@ -1,6 +1,7 @@
 import { lazy, Suspense, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import type { MediaItem } from "../data/projects";
 import { useLightbox } from "./Lightbox";
+import ProjectMediaButton from "./ProjectMediaButton";
 
 const NativeComponents: Record<string, React.LazyExoticComponent<React.ComponentType>> = {
   "make-choice-fate": lazy(() => import("./MakeChoiceFate")),
@@ -13,7 +14,6 @@ type Props = {
   /** "cover" fills a fixed-height frame (feed); "flow" keeps natural height (detail) */
   fit?: "cover" | "flow";
   priority?: boolean;
-  soundToggle?: boolean;
   /** when true, images open in the lightbox on click */
   zoomable?: boolean;
 };
@@ -28,7 +28,6 @@ export default function Media({
   fit = "flow",
   priority = false,
   zoomable = false,
-  soundToggle = false,
 }: Props) {
   const { open } = useLightbox();
   const style =
@@ -80,7 +79,7 @@ export default function Media({
         motionFallback={item.motionFallback}
         style={style}
         priority={priority}
-        soundToggle={soundToggle}
+        soundToggle={fit === "flow"}
       />
     );
   }
@@ -180,22 +179,13 @@ function AutoplayVideo({
     return (
       <div className="project-sound-video">
         {playback}
-        <button
-          type="button"
-          className="project-sound-toggle"
+        <ProjectMediaButton
+          icon={soundOn ? "sound" : "muted"}
           aria-label="Sound"
           aria-pressed={soundOn}
           title={soundOn ? "Mute" : "Unmute"}
           onClick={toggleSound}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M11 5 6 9H3v6h3l5 4z" />
-            {soundOn
-              ? <path d="M15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12" />
-              : <path d="m16 10 5 5m0-5-5 5" />}
-          </svg>
-        </button>
+        />
       </div>
     );
   }

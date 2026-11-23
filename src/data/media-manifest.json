@@ -49,6 +49,10 @@
       },
       {
         "type": "image",
+        "src": "/media/make-choice-fate/02.webp"
+      },
+      {
+        "type": "image",
         "src": "/media/make-choice-fate/03.webp"
       },
       {
@@ -76,6 +80,10 @@
       {
         "type": "image",
         "src": "/media/make-choice-fate/process/04.webp"
+      },
+      {
+        "type": "image",
+        "src": "/media/make-choice-fate/process/05.webp"
       }
     ]
   },
@@ -146,7 +154,15 @@
       },
       {
         "type": "image",
-        "src": "/media/recreatures/02.png"
+        "src": "/media/recreatures/02.webp"
+      },
+      {
+        "type": "image",
+        "src": "/media/recreatures/03.webp"
+      },
+      {
+        "type": "image",
+        "src": "/media/recreatures/04.webp"
       }
     ],
     "process": [
@@ -161,6 +177,10 @@
       {
         "type": "image",
         "src": "/media/recreatures/process/03.png"
+      },
+      {
+        "type": "image",
+        "src": "/media/recreatures/process/04.webp"
       }
     ]
   },
@@ -231,6 +251,14 @@
       {
         "type": "video",
         "src": "/media/you-look-the-same/01.mp4"
+      },
+      {
+        "type": "image",
+        "src": "/media/you-look-the-same/02.webp"
+      },
+      {
+        "type": "video",
+        "src": "/media/you-look-the-same/03.mp4"
       }
     ],
     "process": [
@@ -241,6 +269,14 @@
       {
         "type": "image",
         "src": "/media/you-look-the-same/process/02.webp"
+      },
+      {
+        "type": "image",
+        "src": "/media/you-look-the-same/process/03.webp"
+      },
+      {
+        "type": "image",
+        "src": "/media/you-look-the-same/process/04.webp"
       }
     ]
   }

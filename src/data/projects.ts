@@ -45,6 +45,7 @@ type ProjectDescription = string | (string | { text: string; href: string } | { 
 export type Project = {
   slug: string;
   title: string;
+  status?: "ongoing";
   year: string;
   category: string;
   description: ProjectDescription;
@@ -103,6 +104,7 @@ export const SITE = {
  */
 type Meta = {
   title: string;
+  status?: "ongoing";
   year: string;
   category: string;
   role?: string;
@@ -112,12 +114,13 @@ type Meta = {
 const META: Record<string, Meta> = {
   "you-look-the-same": {
     title: "You Look the Same",
+    status: "ongoing",
     category: "",
     year: "",
     description: [
       "I found this 200-year-old book in an antique shop. It celebrates the unchanging nature of the natural world while criticising humans for constantly changing. In that season, a friend who I hadn’t seen in years said to me, ",
       { emphasis: "“You look the same,”" },
-      " as a compliment.\n\nWhy do we perceive change as something to be avoided?\nWe must be hatched or go bad.",
+      " as a compliment.\n\nWhy do we perceive change as something to be avoided? We must be hatched or go bad.",
     ],
   },
   recreatures: {
@@ -135,8 +138,9 @@ const META: Record<string, Meta> = {
     year: "2026",
     category: "Moving Image",
     role: "Direction, Edit",
-    description:
-      "Hexagonal human, an ideal measured through appearance, education, occupation, personality, family background, and assets, reflects Korea’s highly compressed development. The tendency to focus on limited social values is visible in Dol-jabi, an event for a child’s first birthday. During the celebration, several symbolic objects are placed in front of the child and the object the child picks is believed to hint at their future. The playful tradition becomes a structured ritual where society stages possibilities through the form of free choice.",
+    description: `Starting this project with the personal interest in multiverse, I end up using it as a framework for asking how imagining other possible lives might change the way we relate to other people, rather than treating it as scientific hypothesis. Growing up in Korea, I often felt that success was presented through surprisingly narrow definitions. I brought Dol-jabi as a metaphor, which is a first-birthday ritual where a baby chooses from symbolic objects that predict their future. Although this tradition appears to be based on individual choice, the possibilities have already been selected by society. What does it do for us to think about possible worlds that might or might not exist?
+
+To watch full version (5min), please email me for the link.`,
   },
   "lets-hug": {
     title: "Let's Hug",
@@ -235,17 +239,22 @@ function buildProjects(): Project[] {
     return [{
       slug,
       title: meta?.title ?? slug,
+      status: meta?.status,
       year: meta?.year ?? "",
       category: meta?.category ?? "",
       description: meta?.description ?? "",
       info,
       homeMedia,
       media: (() => {
-        const media = slug === "recreatures"
-          ? entry.media.map((item) => item.src === "/media/recreatures/01.mp4"
-            ? { ...item, motionFallback: "/media/recreatures/detail-fallback.webp" }
-            : item)
-          : entry.media;
+        const media = entry.media.map((item) => {
+          if (item.src === "/media/recreatures/01.mp4") {
+            return { ...item, motionFallback: "/media/recreatures/detail-fallback.webp" };
+          }
+          if (slug === "what-could-you-be" && item.type === "image") {
+            return { ...item, ratio: 16 / 9 };
+          }
+          return item;
+        });
         const base = [...(EMBEDS[slug] ?? []), ...media];
         const ins = INSERTS[slug];
         if (!ins) return base;

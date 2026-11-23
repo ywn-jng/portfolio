@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type p5 from "p5";
+import ProjectMediaButton from "./ProjectMediaButton";
 
 // ml5 is loaded from CDN — it doesn't have a clean ESM build
 declare global {
@@ -491,20 +492,13 @@ export default function LetsHug() {
           )}
         </div>
       )}
-      <button
+      <ProjectMediaButton
+        icon="download"
         hidden={status !== "ready"}
-        type="button"
-        className="mcf-export lets-hug-export"
         aria-label="Save as PNG"
         title="Save as PNG"
         onClick={(e) => { e.stopPropagation(); exportRef.current(); }}
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-      </button>
+      />
     </div>
   );
 }

@@ -162,7 +162,7 @@ export default function ParticleSpring({ entries }: { entries: TimelineEntry[] }
       const measured = items.map((item, index) => ({
         item,
         box: item.getBoundingClientRect(),
-        title: item.querySelector("a")?.getClientRects()[0],
+        title: item.querySelector(".about-credit-name")?.getClientRects()[0],
         placement: labelLayout[index % labelLayout.length],
       }));
       const outsideWidths = measured.filter(({ placement }) => placement.outside).map(({ box }) => box.width);
@@ -246,9 +246,11 @@ export default function ParticleSpring({ entries }: { entries: TimelineEntry[] }
             data-category={category}
             data-dimmed={selectedCategory !== null && selectedCategory !== category}
           >
-            <a target="_blank" rel="noopener noreferrer" className="about-credit-name" href={url}>{name}</a>
-            <div><em>{detail}</em></div>
-            <div>{date}</div>
+            <a target="_blank" rel="noopener noreferrer" className="about-credit-link" href={url}>
+              <span className="about-credit-name">{name}</span>
+              <em>{detail}</em>
+              <span>{date}</span>
+            </a>
           </li>
         ))}
       </ol>

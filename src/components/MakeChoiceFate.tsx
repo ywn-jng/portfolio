@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import ProjectMediaButton from "./ProjectMediaButton";
 
 type Glyph =
   | { id: number; kind: "letter"; char: string; h: number; style: React.CSSProperties }
@@ -175,22 +176,15 @@ export default function MakeChoiceFate() {
       </div>
 
       {/* Download button */}
-      <button
-        type="button"
-        className="mcf-export"
+      <ProjectMediaButton
+        icon="download"
         aria-label="Save as PNG"
         title="Save as PNG"
         onClick={(e) => {
           e.stopPropagation();
           handleExport();
         }}
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-      </button>
+      />
     </div>
   );
 }

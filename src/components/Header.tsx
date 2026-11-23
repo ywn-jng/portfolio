@@ -5,9 +5,11 @@ export default function Header() {
   return (
     <nav className="site-nav" aria-label="Main navigation">
       <NavLink to="/" end>{SITE.name}</NavLink>
-      <Link to="/">Work</Link>
-      <NavLink to="/info">About</NavLink>
-      <a href={`mailto:${SITE.email}`}>Contact</a>
+      <div className="site-nav__links">
+        <Link to="/">Work</Link>
+        <NavLink to="/info">About</NavLink>
+        <a href={`mailto:${SITE.email}`}>Contact</a>
+      </div>
     </nav>
   );
 }
