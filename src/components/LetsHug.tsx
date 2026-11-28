@@ -20,6 +20,33 @@ function loadMl5(): Promise<void> {
   });
 }
 
+function saveParticleImage(canvas: HTMLCanvasElement) {
+  const data = canvas.toDataURL("image/png").split(",")[1];
+  const bytes = Uint8Array.from(atob(data), (character) => character.charCodeAt(0));
+  const file = new File([bytes], "lets_hug_export.png", { type: "image/png" });
+
+  const download = () => {
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 30_000);
+  };
+
+  const shareData = { files: [file] };
+  if (window.matchMedia("(pointer: coarse)").matches && navigator.canShare?.(shareData)) {
+    // Invoke directly from the tap so Safari keeps the user activation.
+    void navigator.share(shareData).catch((error) => {
+      if (error.name !== "AbortError") download();
+    });
+  } else {
+    download();
+  }
+}
+
 const CONTACT_THRESHOLD = 32;
 const MIN_PART_SCORE = 0.02;
 const BODY_SAMPLE_STEPS = 12;
@@ -332,20 +359,24 @@ export default function LetsHug() {
 
         // Export current particle state as transparent PNG
         exportRef.current = () => {
-          const pg = p.createGraphics(p.width, p.height);
-          pg.clear();
-          pg.noStroke();
-          pg.fill(0, 0, 0);
+          const image = document.createElement("canvas");
+          image.width = p.width;
+          image.height = p.height;
+          const context = image.getContext("2d");
+          if (!context || !image.width || !image.height) return;
+          context.beginPath();
           for (const part of particles) {
             const lifeRatio = Math.max(part.life / part.maxLife, 0);
             const size = part.size * lifeRatio;
             if (size <= 0.05) continue;
             const proj = projectPoint(part);
             if (!isFinite(proj.x) || !isFinite(proj.y)) continue;
-            pg.ellipse(proj.x, proj.y, size * viewTransform.scale, size * viewTransform.scale);
+            const radius = size * viewTransform.scale / 2;
+            context.moveTo(proj.x + radius, proj.y);
+            context.arc(proj.x, proj.y, radius, 0, 2 * Math.PI);
           }
-          pg.save("lets_hug_export.png");
-          pg.remove();
+          context.fill();
+          saveParticleImage(image);
         };
 
         p.setup = () => {
@@ -480,7 +511,13 @@ export default function LetsHug() {
   }, [attempt]);
 
   return (
-    <div className="lets-hug" ref={containerRef}>
+    <div
+      className="lets-hug"
+      ref={containerRef}
+      onClick={(event) => {
+        if (status === "ready" && event.target instanceof HTMLCanvasElement) exportRef.current();
+      }}
+    >
       {status !== "ready" && (
         <div className="lets-hug-status">
           <p role="status">

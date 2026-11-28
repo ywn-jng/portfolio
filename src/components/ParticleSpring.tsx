@@ -8,9 +8,11 @@ export type TimelineEntry = {
   date: string;
 };
 
-const turns = 12;
-const dotCount = turns * 154;
-const segmentCount = dotCount * 3;
+const desktopTurns = 12;
+const mobileTurns = 16;
+const desktopDotCount = desktopTurns * 154;
+const mobileDotCount = 1400;
+const segmentCount = desktopDotCount * 3;
 const fullTurn = Math.PI * 2;
 const rotationPeriod = 42_000;
 const cameraTilt = 8 * Math.PI / 180;
@@ -38,7 +40,7 @@ const labelLayout: { rows: number; turn: number; radius?: number; outside?: bool
   { rows: 3.8, turn: 0.76, outside: true },
 ];
 
-const helix = Array.from({ length: segmentCount + 1 }, (_, index) => {
+const makeHelix = (turns: number) => Array.from({ length: segmentCount + 1 }, (_, index) => {
   const progress = index / segmentCount;
   const angle = progress * turns * fullTurn - Math.PI / 2;
   return {
@@ -47,6 +49,8 @@ const helix = Array.from({ length: segmentCount + 1 }, (_, index) => {
     z: Math.sin(angle),
   };
 });
+const desktopHelix = makeHelix(desktopTurns);
+const mobileHelix = makeHelix(mobileTurns);
 
 type Connector = {
   item: HTMLLIElement;
@@ -70,10 +74,13 @@ export default function ParticleSpring({ entries }: { entries: TimelineEntry[] }
     if (!canvas || !labels || !context) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sampleX = new Float64Array(helix.length);
-    const sampleY = new Float64Array(helix.length);
-    const distance = new Float64Array(helix.length);
+    const mobileViewport = window.matchMedia("(max-width: 820px)");
+    const sampleX = new Float64Array(segmentCount + 1);
+    const sampleY = new Float64Array(segmentCount + 1);
+    const distance = new Float64Array(segmentCount + 1);
     const items = [...labels.querySelectorAll("li")];
+    let helix = desktopHelix;
+    let dotCount = desktopDotCount;
     let width = 0;
     let height = 0;
     let radius = 0;
@@ -152,6 +159,10 @@ export default function ParticleSpring({ entries }: { entries: TimelineEntry[] }
       height = bounds.height;
       if (!width || !height) return;
 
+      const mobile = mobileViewport.matches;
+      const turns = mobile ? mobileTurns : desktopTurns;
+      helix = mobile ? mobileHelix : desktopHelix;
+      dotCount = mobile ? mobileDotCount : desktopDotCount;
       const scale = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * scale);
       canvas.height = Math.round(height * scale);
@@ -169,8 +180,9 @@ export default function ParticleSpring({ entries }: { entries: TimelineEntry[] }
       const outsideClearance = outsideWidths.length
         ? width / 2 - Math.min(...outsideWidths) - 18
         : width * springRadius;
-      // On narrow screens, leave enough room for at least one complete label beyond the coil.
-      radius = Math.min(width * springRadius, Math.max(width * 0.22, outsideClearance));
+      const maxRadius = width * (mobile ? 0.43 : springRadius);
+      const minRadius = width * (mobile ? 0.38 : 0.22);
+      radius = Math.min(maxRadius, Math.max(minRadius, outsideClearance));
 
       for (const { item, box, title, placement } of measured) {
         if (!title) continue;
@@ -218,12 +230,14 @@ export default function ParticleSpring({ entries }: { entries: TimelineEntry[] }
     layout();
     updateMotion();
     reducedMotion.addEventListener("change", updateMotion);
+    mobileViewport.addEventListener("change", layout);
     const observer = new ResizeObserver(layout);
     observer.observe(labels);
     for (const item of labels.children) observer.observe(item);
     return () => {
       observer.disconnect();
       reducedMotion.removeEventListener("change", updateMotion);
+      mobileViewport.removeEventListener("change", layout);
       cancelAnimationFrame(frame);
     };
   }, []);

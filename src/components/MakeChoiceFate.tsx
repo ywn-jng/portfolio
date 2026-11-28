@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ProjectMediaButton from "./ProjectMediaButton";
 
 type Glyph =
@@ -48,76 +48,40 @@ export default function MakeChoiceFate() {
   const [glyphs, setGlyphs] = useState<Glyph[]>([]);
   const [focused, setFocused] = useState(false);
   const idRef = useRef(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
+  const previousText = useRef("");
 
-  const hasContent = glyphs.length > 0;
+  const updateComposition = (input: string) => {
+    const next = input.toLowerCase().replace(/[^a-z \n]/g, "");
+    const previous = previousText.current;
+    if (next === previous) return;
+    previousText.current = next;
 
-  const handleKey = useCallback((e: KeyboardEvent) => {
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    let start = 0;
+    while (start < next.length && next[start] === previous[start]) start++;
+    let end = 0;
+    while (end < Math.min(previous.length, next.length) - start &&
+           next[next.length - 1 - end] === previous[previous.length - 1 - end]) end++;
 
-    if (e.key === "Backspace") {
-      e.preventDefault();
-      setGlyphs((g) => (g.length ? g.slice(0, -1) : g));
-      return;
-    }
-
-    if (e.key === "Enter") {
-      e.preventDefault();
-      setGlyphs((g) => [
-        ...g,
-        { id: ++idRef.current, kind: "newline", style: chaosStyle("newline") },
-      ]);
-      return;
-    }
-
-    if (e.key === " ") {
-      e.preventDefault();
-      const w = 2 + Math.random() * 16;
-      setGlyphs((g) => [
-        ...g,
-        {
-          id: ++idRef.current,
+    const added = Array.from(next.slice(start, next.length - end), (char): Glyph => {
+      const id = ++idRef.current;
+      if (char === "\n") return { id, kind: "newline", style: chaosStyle("newline") };
+      if (char === " ") {
+        return {
+          id,
           kind: "space",
-          style: { ...chaosStyle("space"), width: `${w}px` },
-        },
-      ]);
-      return;
-    }
-
-    if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
-      e.preventDefault();
-      const h = MIN_H + Math.random() * (MAX_H - MIN_H);
-      setGlyphs((g) => [
-        ...g,
-        {
-          id: ++idRef.current,
-          kind: "letter",
-          char: e.key.toLowerCase(),
-          h,
-          style: chaosStyle("letter"),
-        },
-      ]);
-    }
-  }, []);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const onFocus = () => setFocused(true);
-    const onBlur = () => setFocused(false);
-
-    el.addEventListener("focus", onFocus);
-    el.addEventListener("blur", onBlur);
-    el.addEventListener("keydown", handleKey);
-
-    return () => {
-      el.removeEventListener("focus", onFocus);
-      el.removeEventListener("blur", onBlur);
-      el.removeEventListener("keydown", handleKey);
-    };
-  }, [handleKey]);
+          style: { ...chaosStyle("space"), width: `${2 + Math.random() * 16}px` },
+        };
+      }
+      return { id, kind: "letter", char, h: MIN_H + Math.random() * (MAX_H - MIN_H), style: chaosStyle("letter") };
+    });
+    setGlyphs((current) => [
+      ...current.slice(0, start),
+      ...added,
+      ...current.slice(previous.length - end),
+    ]);
+  };
 
   // Export the canvas composition as a transparent PNG
   const handleExport = async () => {
@@ -138,15 +102,20 @@ export default function MakeChoiceFate() {
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="mcf"
-      tabIndex={0}
-      role="textbox"
-      aria-label="Type to create a composition"
-      onClick={() => containerRef.current?.focus()}
-    >
-      <div className="mcf-canvas" ref={canvasRef}>
+    <div className="mcf" onClick={() => inputRef.current?.focus({ preventScroll: true })}>
+      <textarea
+        ref={inputRef}
+        className="mcf-input"
+        aria-label="Type to create a composition"
+        autoCapitalize="none"
+        autoCorrect="off"
+        autoComplete="off"
+        spellCheck={false}
+        onChange={(event) => updateComposition(event.currentTarget.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+      />
+      <div className="mcf-canvas" ref={canvasRef} aria-hidden="true">
         {glyphs.map((g) => {
           if (g.kind === "newline") {
             return <div key={g.id} className="mcf-newline" style={g.style} />;
@@ -170,7 +139,7 @@ export default function MakeChoiceFate() {
         <span className={`mcf-caret${focused ? "" : " mcf-caret--idle"}`} />
 
         {/* Hint */}
-        {!hasContent && (
+        {glyphs.length === 0 && (
           <span className="mcf-hint">type here</span>
         )}
       </div>

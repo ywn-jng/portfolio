@@ -1,27 +1,32 @@
 import { useRef, useEffect, useMemo, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { useLoader } from "@react-three/fiber";
 import * as THREE from "three";
 
-function useSvgTexture(url: string, width: number, height: number) {
+function useSvgTexture(url: string, width: number, height: number, textureLimit: number) {
+  const scale = Math.min(1, textureLimit / Math.max(width, height));
+  const pixelWidth = Math.round(width * scale);
+  const pixelHeight = Math.round(height * scale);
   const [texture, setTexture] = useState<THREE.CanvasTexture | null>(null);
   useEffect(() => {
     const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d")!;
+    canvas.width = pixelWidth;
+    canvas.height = pixelHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
     const img = new Image();
     img.onload = () => {
-      ctx.drawImage(img, 0, 0, width, height);
+      ctx.drawImage(img, 0, 0, pixelWidth, pixelHeight);
       const tex = new THREE.CanvasTexture(canvas);
       tex.colorSpace = THREE.SRGBColorSpace;
       setTexture(tex);
     };
     img.src = url;
-  }, [url, width, height]);
+    return () => { img.onload = null; };
+  }, [url, pixelWidth, pixelHeight]);
   return texture;
 }
 
@@ -67,9 +72,9 @@ const SHOULDER_LABEL_IMAGES = [
 ];
 const LABEL_CYCLE_DURATION = 3;
 
-function FrontLabel() {
+function FrontLabel({ textureLimit }: { textureLimit: number }) {
   const textures = useLoader(THREE.TextureLoader, FRONT_LABEL_IMAGES);
-  const svgTexture = useSvgTexture("/media/makuly/3d/front-2.svg", 1424, 2600);
+  const svgTexture = useSvgTexture("/media/makuly/3d/front-2.svg", 1424, 2600, textureLimit);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null!);
   const geometry = useMemo(() => {
     const radius = 0.313;
@@ -90,12 +95,8 @@ function FrontLabel() {
     if (materialRef.current) {
       const elapsed = state.clock.getElapsedTime();
       const index = Math.floor(elapsed / LABEL_CYCLE_DURATION) % FRONT_LABEL_IMAGES.length;
-      if (index === 1 && svgTexture) {
-        materialRef.current.map = svgTexture;
-      } else {
-        materialRef.current.map = textures[index];
-      }
-      materialRef.current.needsUpdate = true;
+      const texture = index === 1 && svgTexture ? svgTexture : textures[index];
+      if (materialRef.current.map !== texture) materialRef.current.map = texture;
     }
   });
 
@@ -114,9 +115,9 @@ function FrontLabel() {
   );
 }
 
-function BackLabel() {
+function BackLabel({ textureLimit }: { textureLimit: number }) {
   const textures = useLoader(THREE.TextureLoader, BACK_LABEL_IMAGES);
-  const svgTexture = useSvgTexture("/media/makuly/3d/back-2.svg", 1802, 2244);
+  const svgTexture = useSvgTexture("/media/makuly/3d/back-2.svg", 1802, 2244, textureLimit);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null!);
   const geometry = useMemo(() => {
     const radius = 0.313;
@@ -137,12 +138,8 @@ function BackLabel() {
     if (materialRef.current) {
       const elapsed = state.clock.getElapsedTime();
       const index = Math.floor(elapsed / LABEL_CYCLE_DURATION) % BACK_LABEL_IMAGES.length;
-      if (index === 1 && svgTexture) {
-        materialRef.current.map = svgTexture;
-      } else {
-        materialRef.current.map = textures[index];
-      }
-      materialRef.current.needsUpdate = true;
+      const texture = index === 1 && svgTexture ? svgTexture : textures[index];
+      if (materialRef.current.map !== texture) materialRef.current.map = texture;
     }
   });
 
@@ -161,9 +158,9 @@ function BackLabel() {
   );
 }
 
-function InfoLabel() {
+function InfoLabel({ textureLimit }: { textureLimit: number }) {
   const textures = useLoader(THREE.TextureLoader, INFO_LABEL_IMAGES);
-  const svgTexture = useSvgTexture("/media/makuly/3d/info-2.svg", 4228, 88);
+  const svgTexture = useSvgTexture("/media/makuly/3d/info-2.svg", 4228, 88, textureLimit);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null!);
   const geometry = useMemo(() => {
     const radius = 0.314;
@@ -184,12 +181,8 @@ function InfoLabel() {
     if (materialRef.current) {
       const elapsed = state.clock.getElapsedTime();
       const index = Math.floor(elapsed / LABEL_CYCLE_DURATION) % INFO_LABEL_IMAGES.length;
-      if (index === 1 && svgTexture) {
-        materialRef.current.map = svgTexture;
-      } else {
-        materialRef.current.map = textures[index];
-      }
-      materialRef.current.needsUpdate = true;
+      const texture = index === 1 && svgTexture ? svgTexture : textures[index];
+      if (materialRef.current.map !== texture) materialRef.current.map = texture;
     }
   });
 
@@ -208,9 +201,9 @@ function InfoLabel() {
   );
 }
 
-function ShoulderLabel() {
+function ShoulderLabel({ textureLimit }: { textureLimit: number }) {
   const textures = useLoader(THREE.TextureLoader, SHOULDER_LABEL_IMAGES);
-  const svgTexture = useSvgTexture("/media/makuly/3d/shoulder-2.svg", 426, 348);
+  const svgTexture = useSvgTexture("/media/makuly/3d/shoulder-2.svg", 426, 348, textureLimit);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null!);
   const geometry = useMemo(() => {
     const offset = 0.002;
@@ -235,12 +228,8 @@ function ShoulderLabel() {
     if (materialRef.current) {
       const elapsed = state.clock.getElapsedTime();
       const index = Math.floor(elapsed / LABEL_CYCLE_DURATION) % SHOULDER_LABEL_IMAGES.length;
-      if (index === 1 && svgTexture) {
-        materialRef.current.map = svgTexture;
-      } else {
-        materialRef.current.map = textures[index];
-      }
-      materialRef.current.needsUpdate = true;
+      const texture = index === 1 && svgTexture ? svgTexture : textures[index];
+      if (materialRef.current.map !== texture) materialRef.current.map = texture;
     }
   });
 
@@ -259,16 +248,27 @@ function ShoulderLabel() {
   );
 }
 
-function Model() {
-  const ref = useRef<THREE.Group>(null!);
-  const lidMaterialRef = useRef<THREE.MeshStandardMaterial | null>(null);
-  const liquidMaterialRef = useRef<THREE.MeshPhysicalMaterial | null>(null);
-  const { camera } = useThree();
+function DesktopModel() {
   const materials = useLoader(MTLLoader, "/media/makuly/MAKULY.mtl");
   const obj = useLoader(OBJLoader, "/media/makuly/MAKULY.obj", (loader) => {
     materials.preload();
     loader.setMaterials(materials);
   });
+  return <Model source={obj} mobile={false} />;
+}
+
+function MobileModel() {
+  const { scene } = useGLTF("/media/makuly/MAKULY-mobile.glb", false, false);
+  return <Model source={scene} mobile />;
+}
+
+function Model({ source, mobile }: { source: THREE.Group; mobile: boolean }) {
+  const ref = useRef<THREE.Group>(null!);
+  const lidMaterialRef = useRef<THREE.MeshStandardMaterial | null>(null);
+  const liquidMaterialRef = useRef<THREE.MeshPhysicalMaterial | null>(null);
+  const { camera } = useThree();
+  const obj = useMemo(() => source.clone(), [source]);
+  const textureLimit = mobile ? 1024 : Infinity;
 
   useEffect(() => {
     if (!obj) return;
@@ -276,10 +276,10 @@ function Model() {
     const glassMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.3,
+      opacity: mobile ? 0.23 : 0.3,
       roughness: 0.05,
       metalness: 0.0,
-      transmission: 0.9,
+      transmission: mobile ? 0 : 0.9,
       thickness: 0.5,
       ior: 1.5,
       envMapIntensity: 1.0,
@@ -293,7 +293,7 @@ function Model() {
       metalness: 0.0,
       transparent: true,
       opacity: 0.92,
-      transmission: 0.08,
+      transmission: mobile ? 0 : 0.08,
       thickness: 1.5,
       ior: 1.35,
       sheen: 0.3,
@@ -330,7 +330,12 @@ function Model() {
     const dist = maxDim / (2 * Math.tan(fov / 2));
     camera.position.set(0, 0, dist * 1.4);
     camera.lookAt(0, 0, 0);
-  }, [obj, camera]);
+    return () => {
+      glassMaterial.dispose();
+      milkMaterial.dispose();
+      lidMaterial.dispose();
+    };
+  }, [obj, camera, mobile]);
 
   useFrame((state, delta) => {
     if (ref.current) {
@@ -355,23 +360,37 @@ function Model() {
       <group scale={[1, 0.9, 1]}>
         <primitive object={obj} />
       </group>
-      <FrontLabel />
-      <BackLabel />
-      <InfoLabel />
-      <ShoulderLabel />
+      <FrontLabel textureLimit={textureLimit} />
+      <BackLabel textureLimit={textureLimit} />
+      <InfoLabel textureLimit={textureLimit} />
+      <ShoulderLabel textureLimit={textureLimit} />
     </group>
   );
 }
 
+const mobileViewport = "(max-width: 820px), (pointer: coarse)";
+
 export default function MakulyModel() {
+  const [mobile, setMobile] = useState(() => window.matchMedia(mobileViewport).matches);
+  useEffect(() => {
+    const query = window.matchMedia(mobileViewport);
+    const update = () => setMobile(query.matches);
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
   return (
-    <div style={{ width: "100%", aspectRatio: "4/3", background: "#111" }}>
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+    <div className="makuly-model">
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 45 }}
+        dpr={mobile ? [1, 1.25] : [1, 2]}
+        fallback={<img className="makuly-model-poster" src="/media/makuly/05.webp" alt="MAKULY packaging" />}
+      >
         <ambientLight intensity={0.6} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
         <directionalLight position={[-3, -2, -4]} intensity={0.3} />
-        <Model />
-        <OrbitControls enableZoom={false} enablePan={false} />
+        {mobile ? <MobileModel /> : <DesktopModel />}
+        <OrbitControls enableZoom={false} enablePan={false} touches={{ ONE: THREE.TOUCH.ROTATE }} />
       </Canvas>
     </div>
   );
