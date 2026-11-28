@@ -887,7 +887,7 @@ body:has(.about-page) {
 }
 
 .home-gallery__tile--makuly {
-  --tile-start: 13;
+  --tile-start: 12;
   --tile-span: 3;
   --tile-row: 116;
   --tile-ratio: 399 / 564;
@@ -902,7 +902,7 @@ body:has(.about-page) {
 
 .home-gallery__tile--you-look-the-same {
   --tile-start: 2;
-  --tile-span: 5;
+  --tile-span: 6;
   --tile-row: 104;
   transform: translateX(calc(0.25 * var(--column)));
   --tile-ratio: 16 / 9;
