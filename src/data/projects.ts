@@ -24,6 +24,8 @@ export type MediaItem = {
   src: string;
   poster?: string;
   motionFallback?: string;
+  /** Video without an audio track. */
+  hasAudio?: boolean;
   /** Direct viewing link for an embedded film. */
   watchUrl?: string;
   alt?: string;
@@ -230,7 +232,7 @@ function buildProjects(): Project[] {
 
     const firstImage = entry.media.find(({ type }) => type === "image");
     const homeMedia = entry.homeMedia?.type === "video"
-      ? { ...entry.homeMedia, poster: firstImage?.src }
+      ? { ...entry.homeMedia, poster: entry.homeMedia.motionFallback ?? firstImage?.src }
       : entry.homeMedia ?? firstImage;
 
     const info: InfoRow[] = [];
@@ -247,8 +249,8 @@ function buildProjects(): Project[] {
       homeMedia,
       media: (() => {
         const media = entry.media.map((item) => {
-          if (item.src === "/media/recreatures/01.mp4") {
-            return { ...item, motionFallback: "/media/recreatures/detail-fallback.webp" };
+          if (item.src === "/media/recreatures/02.mp4") {
+            return { ...item, hasAudio: false };
           }
           if (slug === "what-could-you-be" && item.type === "image") {
             return { ...item, ratio: 16 / 9 };

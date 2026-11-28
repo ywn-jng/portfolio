@@ -79,7 +79,7 @@ export default function Media({
         motionFallback={item.motionFallback}
         style={style}
         priority={priority}
-        soundToggle={fit === "flow"}
+        soundToggle={fit === "flow" && item.hasAudio !== false}
       />
     );
   }

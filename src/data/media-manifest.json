@@ -149,12 +149,12 @@
     },
     "media": [
       {
-        "type": "video",
-        "src": "/media/recreatures/01.mp4"
+        "type": "image",
+        "src": "/media/recreatures/01.webp"
       },
       {
-        "type": "image",
-        "src": "/media/recreatures/02.webp"
+        "type": "video",
+        "src": "/media/recreatures/02.mp4"
       },
       {
         "type": "image",
@@ -164,19 +164,27 @@
     "process": [
       {
         "type": "image",
-        "src": "/media/recreatures/process/01.png"
+        "src": "/media/recreatures/process/01.webp"
       },
       {
         "type": "image",
-        "src": "/media/recreatures/process/02.png"
+        "src": "/media/recreatures/process/02.webp"
       },
       {
         "type": "image",
-        "src": "/media/recreatures/process/03.png"
+        "src": "/media/recreatures/process/03.webp"
       },
       {
         "type": "image",
         "src": "/media/recreatures/process/04.webp"
+      },
+      {
+        "type": "image",
+        "src": "/media/recreatures/process/05.webp"
+      },
+      {
+        "type": "image",
+        "src": "/media/recreatures/process/06.webp"
       }
     ]
   },
